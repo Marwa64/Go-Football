@@ -2,7 +2,7 @@ import java.util.*;
 
 public class player extends user{
 	
-	private eWallet wallet;
+	public eWallet wallet;
 	public ArrayList<slot> bookedSlots = new ArrayList<slot>();
     public ArrayList<ArrayList<String> > team = new ArrayList<ArrayList<String>>();
 	
