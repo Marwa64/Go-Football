@@ -42,20 +42,6 @@ public class system {
 	private JLabel invalidLabel_1;
 	private JLabel invalidLabel_2;
 	private JPanel playgroundsOwnerPanel;
-	private JPanel editPlaygroundPanel;
-	private JTextField nameEditField;
-	private JTextArea descriptionEditField;
-	private JTextField sizeEditField;
-	private JTextField priceEditField;
-	private JTextField locationEditField;
-	private JTextField toEditField;
-	private JTextField fromEditField;
-	private JTextField cancelEditField;
-	private JPanel slotsEditPanel;
-	private JLabel errorEditMsg;
-	private JLabel invalidLabel_3;
-	private JLabel invalidLabel_4;
-	private JLabel invalidLabel_5;
 	private JButton btnUpdateO;
 	private JLabel errorMsgProfile;
 	private JButton btnDepositO;
@@ -84,6 +70,8 @@ public class system {
 	private JLabel errorMsgProfile_1;
 	private JLabel invalidLabel_8;
 	private JLabel invalidLabel_9;
+	private JPanel bookedSlotsPanelP;
+	private JPanel bookedSlotsPanelO;
 	
 	private static ArrayList<player> players = new ArrayList<player>(); // Contains all the players
 	private static ArrayList<playgroundOwner> owners = new ArrayList<playgroundOwner>(); // Contains all the playground owners
@@ -101,7 +89,6 @@ public class system {
 	private JTextField numberProfileFieldO;
 	private JTextField depositField;
 	private JTextField withdrawField;
-	private JTextField dateEditField;
 	private JTextField locationSearchField;
 	private JTextField fromSearchField;
 	private JTextField toSearchField;
@@ -304,157 +291,6 @@ public class system {
 			namelabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
 			namelabel.setBounds(10, 11 + (325*i), 302, 14);
 			playgroundsOwnerPanel.add(namelabel);
-			int pgdIndex = i;
-			JButton btnUpdateEdit = new JButton("Update");
-			btnUpdateEdit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("the update button is run");
-					if (nameEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the playground name");
-					} else if (descriptionEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the playground description");
-					} else if (sizeEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the size of the playground");
-					} else if (priceEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the price of the playground");
-					} else if (locationEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the location of the playground");
-					} else if (cancelEditField.getText().equals("")) {
-						errorEditMsg.setText("Enter the cancellation period");
-					} else if ((invalidLabel_3.getText().equals("")) && (invalidLabel_4.getText().equals("")) && (invalidLabel_5.getText().equals(""))){
-						errorEditMsg.setText("");
-						float size = Float.parseFloat(sizeEditField.getText());
-						double price = Double.parseDouble(priceEditField.getText());
-						int cancel = Integer.parseInt(cancelEditField.getText());
-						owners.get(currentUserID).playgrounds.get(pgdIndex).updateInfo(nameEditField.getText(), descriptionEditField.getText(), locationEditField.getText(), size, cancel, price);
-						System.out.println("Current playground index: " + pgdIndex);
-						
-						editPlaygroundPanel.remove(btnUpdateEdit);
-						displayOwnerPlaygrounds();
-						editPlaygroundPanel.setVisible(false);
-						playgroundsOwnerPanel.setVisible(true);
-					}
-				}
-			});
-			btnUpdateEdit.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-			btnUpdateEdit.setBounds(184, 555, 96, 26);
-			editPlaygroundPanel.add(btnUpdateEdit);
-			JButton editBtn = new JButton("Edit");
-			editBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					slotsEditPanel.removeAll();
-					editPlaygroundPanel.setVisible(true);
-					playgroundsOwnerPanel.setVisible(false);
-					System.out.println("Number of edit buttons: " + editPlaygroundBtns.size());
-					System.out.println("Number of playgrounds: " + owners.get(currentUserID).playgrounds.size());
-					String size = ""+owners.get(currentUserID).playgrounds.get(pgdIndex).getSize();
-					String price = ""+owners.get(currentUserID).playgrounds.get(pgdIndex).getPrice();
-					String cancel = ""+owners.get(currentUserID).playgrounds.get(pgdIndex).getCancellationPeriod();
-					nameEditField.setText(owners.get(currentUserID).playgrounds.get(pgdIndex).getName());
-					descriptionEditField.setText(owners.get(currentUserID).playgrounds.get(pgdIndex).getDescription());
-					sizeEditField.setText(size);
-					priceEditField.setText(price);
-					locationEditField.setText(owners.get(currentUserID).playgrounds.get(pgdIndex).getLocation());
-					cancelEditField.setText(cancel);
-					for (int j = 0; j <  owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size(); j++) {
-						JLabel slotLabel = new JLabel("  slot #"+(j+1) + "   From: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getFrom() + "   To: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getTo() + "   Date: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getDate());
-						slotLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-						slotLabel.setBounds(10, 11+(40 * j), 320, 14); // Gap between the labels
-						slotsEditPanel.add(slotLabel);
-						JButton deleteBtn = new JButton("Delete");
-						deleteBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 10));
-						deleteBtn.setBounds(340, 7+(40 * j), 72, 23);
-						int slotIndex = j;
-						deleteBtn.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								System.out.println("Slot index: " + slotIndex);
-								System.out.println("Slot size before: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size());
-								owners.get(currentUserID).playgrounds.get(pgdIndex).slots.remove(slotIndex);
-								System.out.println("Slot size after: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size());
-								slotsEditPanel.removeAll();
-								for (int j = 0; j <  owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size(); j++) {
-									JLabel slotLabel = new JLabel("  slot #"+(j+1) + "   From: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getFrom() + "   To: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getTo() + "   Date: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getDate());
-									slotLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-									slotLabel.setBounds(10, 11+(40 * j), 320, 12); // Gap between the labels
-									slotsEditPanel.add(slotLabel);
-									JButton deleteBtn = new JButton("Delete");
-									deleteBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 10));
-									deleteBtn.setBounds(340, 7+(40 * j), 72, 23);
-									slotsEditPanel.add(deleteBtn);
-								}
-								slotsEditPanel.setPreferredSize(new Dimension(100, 44*owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size())); // Increases the size of the panel
-								slotsEditPanel.revalidate();
-								slotsEditPanel.repaint();
-							}
-						});
-						slotsEditPanel.add(deleteBtn);
-					}
-					slotsEditPanel.setPreferredSize(new Dimension(100, 44*owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size())); // Increases the size of the panel
-				}
-			});
-			JButton editAddBtn = new JButton("Add");
-			editAddBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					System.out.println("the edit add button is run");
-					if (toEditField.getText().equals("") || fromEditField.getText().equals("") || dateEditField.getText().equals("")){
-						errorEditMsg.setText("Enter the From and To and Date fields");
-					} else {
-						errorEditMsg.setText(""); // rests the error message
-						slot newSlot = new slot(fromEditField.getText(), toEditField.getText(), dateEditField.getText());
-						owners.get(currentUserID).playgrounds.get(pgdIndex).addSlot(newSlot);
-						// Reset the fields
-						slotsEditPanel.removeAll();
-						// Refreshes the panel
-						for (int j = 0; j <  owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size(); j++) {
-							JLabel slotLabel = new JLabel("  slot #"+(j+1) + "   From: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getFrom() + "   To: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getTo() + "  Date: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getDate());
-							slotLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-							slotLabel.setBounds(10, 11+(40 * j), 320, 14); // Gap between the labels
-							slotsEditPanel.add(slotLabel);
-							JButton deleteBtn = new JButton("Delete");
-							deleteBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 10));
-							deleteBtn.setBounds(340, 7+(40 * j), 72, 23);
-							int slotIndex = j;
-							deleteBtn.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent e) {
-									System.out.println("Slot index: " + slotIndex);
-									System.out.println("Slot size before: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size());
-									owners.get(currentUserID).playgrounds.get(pgdIndex).slots.remove(slotIndex);
-									System.out.println("Slot size after: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size());
-									slotsEditPanel.removeAll();
-									for (int j = 0; j <  owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size(); j++) {
-										JLabel slotLabel = new JLabel("  slot #"+(j+1) + "   From: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getFrom() + "   To: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getTo() + "  Date: " + owners.get(currentUserID).playgrounds.get(pgdIndex).slots.get(j).getDate());
-										slotLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-										slotLabel.setBounds(10, 11+(40 * j), 320, 12); // Gap between the labels
-										slotsEditPanel.add(slotLabel);
-										JButton deleteBtn = new JButton("Delete");
-										deleteBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 10));
-										deleteBtn.setBounds(340, 7+(40 * j), 72, 23);
-										slotsEditPanel.add(deleteBtn);
-									}
-									slotsEditPanel.setPreferredSize(new Dimension(100, 44*owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size())); // Increases the size of the panel
-									slotsEditPanel.revalidate();
-									slotsEditPanel.repaint();
-								}
-							});
-							slotsEditPanel.add(deleteBtn);
-						}
-						slotsEditPanel.setPreferredSize(new Dimension(100, 44*owners.get(currentUserID).playgrounds.get(pgdIndex).slots.size())); // Increases the size of the panel
-						toEditField.setText("");
-						fromEditField.setText("");
-						dateEditField.setText("");
-						slotsEditPanel.revalidate();
-						slotsEditPanel.repaint();
-					}
-				}
-			});
-			editAddBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 11));
-			editAddBtn.setBounds(202, 426, 81, 23);
-			editPlaygroundPanel.add(editAddBtn);
-			
-			editBtn.setFont(new Font("Showcard Gothic", Font.PLAIN, 11));
-			editBtn.setBounds(322, 7 + (325*i), 77, 23);
-			editPlaygroundBtns.add(editBtn);
-			playgroundsOwnerPanel.add(editBtn);
 			
 			JTextArea descriptionLabel = new JTextArea();
 			descriptionLabel.setLineWrap(true);
@@ -570,18 +406,20 @@ public class system {
 		});
 	}
 	public void ownerBookedSlots() {
+		bookedSlotsPanelO.removeAll();
 		// Loops through the owner's playgrounds
 		int slotGap = 0;
 		for (int i = 0; i < owners.get(currentUserID).playgrounds.size(); i++) {
 			// Loops through that playground's slots
 			for (int j = 0; j < owners.get(currentUserID).playgrounds.get(i).slots.size(); j++) {
 				if (owners.get(currentUserID).playgrounds.get(i).slots.get(j).isBooked()) {
-					JLabel newSlot = new JLabel("Playground #" + (i+1) + "  Slot #" + (j+1) + " - From: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getFrom() + "  To: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getTo() + "   Date: " +  owners.get(currentUserID).playgrounds.get(i).slots.get(j).getDate() + "  Player: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getPlayer());
-					newSlot.setForeground(Color.WHITE);
-					newSlot.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-					newSlot.setBounds(21, 176 +(46*slotGap), 457, 14);
-					viewBookingsOwnerPanel.add(newSlot);
+					JLabel newSlot = new JLabel("<html>Playground #" + (i+1) + "  Slot #" + (j+1) + " - From: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getFrom() + "  To: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getTo() + "   Date: " +  owners.get(currentUserID).playgrounds.get(i).slots.get(j).getDate() + "  <br>Player: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getPlayer() + "</html>");
+					newSlot.setForeground(new Color(255, 204, 0));
+					newSlot.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+					newSlot.setBounds(10, 11 +(50*slotGap), 427, 45);
+					bookedSlotsPanelO.add(newSlot);
 					slotGap++;
+					bookedSlotsPanelO.setPreferredSize(new Dimension(150, 70 * slotGap));
 				}
 			}
 		}
@@ -633,6 +471,7 @@ public class system {
 							btnBook.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent arg0) {
 									owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot).book();
+									owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot).setPlayer(players.get(currentUserID).getName());
 									players.get(currentUserID).bookSlot(owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot));
 									displayAllPlaygrounds("", "", "", "");
 								}
@@ -712,6 +551,58 @@ public class system {
 				}
 			}
 		});
+	}
+	public void playerBookedSlots() {
+		bookedSlotsPanelP.removeAll();
+		for (int i = 0; i < players.get(currentUserID).bookedSlots.size(); i++) {
+			JLabel slot = new JLabel("Slot #" + (i+1) + "   Date: " + players.get(currentUserID).bookedSlots.get(i).getDate() + "  From: " + players.get(currentUserID).bookedSlots.get(i).getFrom() + "  To: " + players.get(currentUserID).bookedSlots.get(i).getTo());
+			slot.setForeground(new Color(255, 204, 0));
+			slot.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+			slot.setBounds(10, 11+(81 * i), 416, 14);
+			bookedSlotsPanelP.add(slot);
+			int currentSlot = i;
+			JButton btnCancelBooking = new JButton("Cancel Booking");
+			btnCancelBooking.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					boolean done = false;
+					System.out.println("Current Slot: " + currentSlot);
+					System.out.println("Number of booked slots: " + players.get(currentUserID).bookedSlots.size());
+					for (int ownerIndex = 0; ownerIndex < owners.size(); ownerIndex++) {
+						for (int playgroundIndex = 0; playgroundIndex < owners.get(ownerIndex).playgrounds.size(); playgroundIndex++) {
+							for (int slotIndex = 0; slotIndex < owners.get(ownerIndex).playgrounds.get(playgroundIndex).slots.size(); slotIndex++) {
+								System.out.println("Number of slots this owner has: " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).slots.size());
+								if (owners.get(ownerIndex).playgrounds.get(playgroundIndex).slots.get(slotIndex).equals(players.get(currentUserID).bookedSlots.get(currentSlot))) {
+									owners.get(ownerIndex).playgrounds.get(playgroundIndex).slots.get(slotIndex).unBook();
+									players.get(currentUserID).cancelBooking(currentSlot);
+									done = true;
+									playerBookedSlots();
+									break;
+								}
+								if (done == true) {
+									break;
+								}
+							}
+							if (done == true) {
+								break;
+							}
+						}
+					}
+				}
+			});
+			btnCancelBooking.setForeground(Color.WHITE);
+			btnCancelBooking.setBackground(Color.BLACK);
+			btnCancelBooking.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+			btnCancelBooking.setBounds(51, 36+(81 * i), 151, 23);
+			bookedSlotsPanelP.add(btnCancelBooking);
+			JButton btnInviteTeam = new JButton("Invite Team");
+			btnInviteTeam.setForeground(Color.WHITE);
+			btnInviteTeam.setBackground(Color.BLACK);
+			btnInviteTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+			btnInviteTeam.setBounds(235, 36+(81 * i), 151, 23);
+			bookedSlotsPanelP.add(btnInviteTeam);
+			bookedSlotsPanelP.setPreferredSize(new Dimension(150, 100 * i));
+		}
+		//bookedSlotsPanelP
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -946,6 +837,7 @@ public class system {
 					String email = emailSignupField.getText();
 					String password = passwordSignupField.getText();
 					createUser(name, email, password);
+					verificationCodeField.setText("");
 					tabbedPane.setSelectedComponent(loginPanel); // Go to the login tab
 				} else {
 					errorMsgVerification.setText("Incorrect code");
@@ -1076,6 +968,58 @@ public class system {
 		btnOLogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
 		btnOLogOut.setBounds(10, 528, 205, 49);
 		menuOwnerPanel.add(btnOLogOut);
+		
+		viewBookingsOwnerPanel = new JPanel();
+		viewBookingsOwnerPanel.setBounds(227, 0, 499, 652);
+		OwnerPanel.add(viewBookingsOwnerPanel);
+		viewBookingsOwnerPanel.setLayout(null);
+		viewBookingsOwnerPanel.setBackground(new Color(51, 153, 102));
+		
+		JLabel lblBookings = new JLabel("Bookings");
+		lblBookings.setForeground(Color.WHITE);
+		lblBookings.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
+		lblBookings.setBounds(162, 83, 169, 50);
+		viewBookingsOwnerPanel.add(lblBookings);
+		
+		bookedSlotsPanelO = new JPanel();
+		bookedSlotsPanelO.setBackground(new Color(51, 153, 102));
+		bookedSlotsPanelO.setLayout(null);
+		
+		JScrollPane scrollPane_2 = new JScrollPane(bookedSlotsPanelO,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JLabel lblSlotDate_1 = new JLabel("<html>Playground #1 Cairo<br>Slot #1    date: 22-22-2002   from: 12:20 am   to: 23:23 pm</html>");
+		lblSlotDate_1.setForeground(new Color(255, 204, 0));
+		lblSlotDate_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblSlotDate_1.setBounds(10, 11, 427, 45);
+		bookedSlotsPanelO.add(lblSlotDate_1);
+		scrollPane_2.setBounds(25, 166, 449, 475);
+		viewBookingsOwnerPanel.add(scrollPane_2);
+		
+		homeOwnerPanel = new JPanel();
+		homeOwnerPanel.setBounds(227, 0, 499, 652);
+		homeOwnerPanel.setBackground(new Color(51, 153, 102));
+		OwnerPanel.add(homeOwnerPanel);
+		homeOwnerPanel.setLayout(null);
+		
+		JLabel lblHome = new JLabel("Home");
+		lblHome.setForeground(Color.WHITE);
+		lblHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 32));
+		lblHome.setBounds(198, 57, 109, 50);
+		homeOwnerPanel.add(lblHome);
+		
+		JLabel lblYourPlaygrounds = new JLabel("Your Playgrounds:");
+		lblYourPlaygrounds.setForeground(Color.WHITE);
+		lblYourPlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 22));
+		lblYourPlaygrounds.setBounds(25, 157, 259, 50);
+		homeOwnerPanel.add(lblYourPlaygrounds);
+		
+
+		playgroundsOwnerPanel = new JPanel();
+		playgroundsOwnerPanel.setBackground(new Color(51, 153, 102));
+		playgroundsOwnerPanel.setLayout(null);
+		JScrollPane scrollPane_1 = new JScrollPane(playgroundsOwnerPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setBounds(47, 207, 426, 407);
+		homeOwnerPanel.add(scrollPane_1);
 		
 		profileOwnerPanel = new JPanel();
 		profileOwnerPanel.setBounds(227, 0, 499, 652);
@@ -1269,236 +1213,6 @@ public class system {
 		invalidLabel_7.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
 		invalidLabel_7.setBounds(48, 505, 123, 14);
 		profileOwnerPanel.add(invalidLabel_7);
-		
-		homeOwnerPanel = new JPanel();
-		homeOwnerPanel.setBounds(227, 0, 499, 652);
-		homeOwnerPanel.setBackground(new Color(51, 153, 102));
-		OwnerPanel.add(homeOwnerPanel);
-		homeOwnerPanel.setLayout(null);
-		
-		editPlaygroundPanel = new JPanel();
-		editPlaygroundPanel.setVisible(false);
-		editPlaygroundPanel.setForeground(new Color(0, 0, 0));
-		editPlaygroundPanel.setBackground(new Color(153, 204, 153));
-		editPlaygroundPanel.setBounds(10, 37, 479, 592);
-		homeOwnerPanel.add(editPlaygroundPanel);
-		editPlaygroundPanel.setLayout(null);
-		
-		JLabel lblEditPlayground = new JLabel("Edit Playground");
-		lblEditPlayground.setForeground(new Color(0, 0, 0));
-		lblEditPlayground.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
-		lblEditPlayground.setBounds(118, 11, 266, 81);
-		editPlaygroundPanel.add(lblEditPlayground);
-		
-		JLabel playgroundNameLabel_1 = new JLabel("Name:");
-		playgroundNameLabel_1.setForeground(new Color(0, 0, 0));
-		playgroundNameLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		playgroundNameLabel_1.setBounds(23, 76, 56, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_1);
-		
-		JLabel lblDescription_1 = new JLabel("Description:");
-		lblDescription_1.setForeground(new Color(0, 0, 0));
-		lblDescription_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblDescription_1.setBounds(23, 126, 119, 30);
-		editPlaygroundPanel.add(lblDescription_1);
-		
-		JLabel lblSize_1 = new JLabel("Size:");
-		lblSize_1.setForeground(new Color(0, 0, 0));
-		lblSize_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblSize_1.setBounds(23, 190, 56, 30);
-		editPlaygroundPanel.add(lblSize_1);
-		
-		JLabel lblPricehour = new JLabel("Price/Hour:");
-		lblPricehour.setForeground(new Color(0, 0, 0));
-		lblPricehour.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblPricehour.setBounds(23, 231, 119, 30);
-		editPlaygroundPanel.add(lblPricehour);
-		
-		JLabel lblCancellationPeriod = new JLabel("Cancellation Period:");
-		lblCancellationPeriod.setForeground(new Color(0, 0, 0));
-		lblCancellationPeriod.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblCancellationPeriod.setBounds(23, 282, 203, 30);
-		editPlaygroundPanel.add(lblCancellationPeriod);
-		
-		JLabel playgroundNameLabel_6 = new JLabel("Location:");
-		playgroundNameLabel_6.setForeground(new Color(0, 0, 0));
-		playgroundNameLabel_6.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		playgroundNameLabel_6.setBounds(23, 323, 103, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_6);
-		
-		JLabel playgroundNameLabel_7 = new JLabel("Slots:");
-		playgroundNameLabel_7.setForeground(new Color(0, 0, 0));
-		playgroundNameLabel_7.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		playgroundNameLabel_7.setBounds(23, 360, 56, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_7);
-		
-		nameEditField = new JTextField();
-		nameEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		nameEditField.setBounds(143, 82, 272, 20);
-		editPlaygroundPanel.add(nameEditField);
-		nameEditField.setColumns(10);
-		
-		sizeEditField = new JTextField();
-		sizeEditField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					int i = Integer.parseInt(sizeEditField.getText()+e.getKeyChar());
-					invalidLabel_3.setText("");
-				} catch(NumberFormatException e1) {
-					invalidLabel_3.setText("Invalid Number");
-				}
-			}
-		});
-		sizeEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		sizeEditField.setColumns(10);
-		sizeEditField.setBounds(143, 196, 72, 20);
-		editPlaygroundPanel.add(sizeEditField);
-		
-		priceEditField = new JTextField();
-		priceEditField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					int i = Integer.parseInt(priceEditField.getText()+e.getKeyChar());
-					invalidLabel_4.setText("");
-				} catch(NumberFormatException e1) {
-					invalidLabel_4.setText("Invalid Number");
-				}
-			}
-		});
-		priceEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		priceEditField.setColumns(10);
-		priceEditField.setBounds(143, 237, 103, 20);
-		editPlaygroundPanel.add(priceEditField);
-		
-		locationEditField = new JTextField();
-		locationEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		locationEditField.setColumns(10);
-		locationEditField.setBounds(143, 329, 272, 20);
-		editPlaygroundPanel.add(locationEditField);
-		
-		toEditField = new JTextField();
-		toEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		toEditField.setColumns(10);
-		toEditField.setBounds(211, 395, 72, 20);
-		editPlaygroundPanel.add(toEditField);
-		
-		fromEditField = new JTextField();
-		fromEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		fromEditField.setColumns(10);
-		fromEditField.setBounds(87, 395, 65, 20);
-		editPlaygroundPanel.add(fromEditField);
-		
-		descriptionEditField = new JTextArea();
-		descriptionEditField.setLineWrap(true);
-		descriptionEditField.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		descriptionEditField.setBounds(143, 130, 272, 50);
-		editPlaygroundPanel.add(descriptionEditField);
-		
-		cancelEditField = new JTextField();
-		cancelEditField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					int i = Integer.parseInt(cancelEditField.getText()+e.getKeyChar());
-					invalidLabel_5.setText("");
-				} catch(NumberFormatException e1) {
-					invalidLabel_5.setText("Invalid Number");
-				}
-			}
-		});
-		cancelEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		cancelEditField.setColumns(10);
-		cancelEditField.setBounds(211, 287, 86, 20);
-		editPlaygroundPanel.add(cancelEditField);
-		
-		JLabel playgroundNameLabel_7_1 = new JLabel("From:");
-		playgroundNameLabel_7_1.setForeground(Color.BLACK);
-		playgroundNameLabel_7_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-		playgroundNameLabel_7_1.setBounds(33, 390, 56, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_7_1);
-		
-		JLabel playgroundNameLabel_7_2 = new JLabel("To:");
-		playgroundNameLabel_7_2.setForeground(Color.BLACK);
-		playgroundNameLabel_7_2.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-		playgroundNameLabel_7_2.setBounds(174, 390, 35, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_7_2);
-		
-		JLabel playgroundNameLabel_7_1_1 = new JLabel("days");
-		playgroundNameLabel_7_1_1.setForeground(Color.BLACK);
-		playgroundNameLabel_7_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-		playgroundNameLabel_7_1_1.setBounds(307, 282, 56, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_7_1_1);
-		
-		slotsEditPanel= new JPanel();
-		slotsEditPanel.setLayout(null);
-		
-		JScrollPane scrollPane_2 = new JScrollPane(slotsEditPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_2.setBounds(23, 450, 431, 63);
-		editPlaygroundPanel.add(scrollPane_2);
-		
-		errorEditMsg = new JLabel("", SwingConstants.CENTER);
-		errorEditMsg.setForeground(new Color(255, 102, 102));
-		errorEditMsg.setFont(new Font("Showcard Gothic", Font.PLAIN, 18));
-		errorEditMsg.setBounds(33, 524, 407, 20);
-		editPlaygroundPanel.add(errorEditMsg);
-		
-		invalidLabel_3 = new JLabel("");
-		invalidLabel_3.setForeground(new Color(255, 102, 102));
-		invalidLabel_3.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_3.setBounds(237, 211, 123, 14);
-		editPlaygroundPanel.add(invalidLabel_3);
-		
-		invalidLabel_4 = new JLabel("");
-		invalidLabel_4.setForeground(new Color(255, 102, 102));
-		invalidLabel_4.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_4.setBounds(261, 252, 123, 14);
-		editPlaygroundPanel.add(invalidLabel_4);
-		
-		invalidLabel_5 = new JLabel("");
-		invalidLabel_5.setForeground(new Color(255, 102, 102));
-		invalidLabel_5.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_5.setBounds(356, 300, 123, 14);
-		editPlaygroundPanel.add(invalidLabel_5);
-		
-		JLabel dateLabel = new JLabel("Date:");
-		dateLabel.setForeground(Color.BLACK);
-		dateLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-		dateLabel.setBounds(298, 389, 65, 30);
-		editPlaygroundPanel.add(dateLabel);
-		
-		dateEditField = new JTextField();
-		dateEditField.setFont(new Font("Times New Roman", Font.PLAIN, 11));
-		dateEditField.setColumns(10);
-		dateEditField.setBounds(351, 395, 103, 20);
-		editPlaygroundPanel.add(dateEditField);
-		
-		JLabel playgroundNameLabel_7_1_1_1 = new JLabel("pounds");
-		playgroundNameLabel_7_1_1_1.setForeground(Color.BLACK);
-		playgroundNameLabel_7_1_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 14));
-		playgroundNameLabel_7_1_1_1.setBounds(256, 231, 81, 30);
-		editPlaygroundPanel.add(playgroundNameLabel_7_1_1_1);
-		
-		JLabel lblHome = new JLabel("Home");
-		lblHome.setForeground(Color.WHITE);
-		lblHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 32));
-		lblHome.setBounds(198, 57, 109, 50);
-		homeOwnerPanel.add(lblHome);
-		
-		JLabel lblYourPlaygrounds = new JLabel("Your Playgrounds:");
-		lblYourPlaygrounds.setForeground(Color.WHITE);
-		lblYourPlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 22));
-		lblYourPlaygrounds.setBounds(25, 157, 259, 50);
-		homeOwnerPanel.add(lblYourPlaygrounds);
-		
-
-		playgroundsOwnerPanel = new JPanel();
-		playgroundsOwnerPanel.setBackground(new Color(51, 153, 102));
-		playgroundsOwnerPanel.setLayout(null);
-		JScrollPane scrollPane_1 = new JScrollPane(playgroundsOwnerPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(47, 207, 426, 407);
-		homeOwnerPanel.add(scrollPane_1);
 		
 		addPlaygroundOwnerPanel = new JPanel();
 		addPlaygroundOwnerPanel.setBounds(227, 0, 499, 652);
@@ -1781,18 +1495,6 @@ public class system {
 		lblPounds_1.setBounds(275, 283, 81, 21);
 		addPlaygroundOwnerPanel.add(lblPounds_1);
 		
-		viewBookingsOwnerPanel = new JPanel();
-		viewBookingsOwnerPanel.setBounds(227, 0, 499, 652);
-		OwnerPanel.add(viewBookingsOwnerPanel);
-		viewBookingsOwnerPanel.setLayout(null);
-		viewBookingsOwnerPanel.setBackground(new Color(51, 153, 102));
-		
-		JLabel lblBookings = new JLabel("Bookings");
-		lblBookings.setForeground(Color.WHITE);
-		lblBookings.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
-		lblBookings.setBounds(162, 83, 169, 50);
-		viewBookingsOwnerPanel.add(lblBookings);
-		
 		tabbedPane.addTab("Player", null, playerPanel, null);
 		playerPanel.setLayout(null);
 		
@@ -1844,6 +1546,7 @@ public class system {
 		JButton btnPBookedSlots = new JButton("Booked Slots");
 		btnPBookedSlots.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				playerBookedSlots();
 				bookedSlotsPlayerPanel.setVisible(true);
 				homePlayerPanel.setVisible(false);
 				profilePlayerPanel.setVisible(false);
@@ -1891,6 +1594,59 @@ public class system {
 		btnPLogOut.setBackground(Color.BLACK);
 		btnPLogOut.setBounds(10, 528, 205, 49);
 		menuPlayerPanel.add(btnPLogOut);
+		
+		bookedSlotsPlayerPanel = new JPanel();
+		bookedSlotsPlayerPanel.setBounds(227, 0, 499, 652);
+		playerPanel.add(bookedSlotsPlayerPanel);
+		bookedSlotsPlayerPanel.setLayout(null);
+		bookedSlotsPlayerPanel.setForeground(Color.BLACK);
+		bookedSlotsPlayerPanel.setBackground(new Color(51, 153, 102));
+		
+		JLabel lblBookedSlots = new JLabel("Booked Slots");
+		lblBookedSlots.setForeground(Color.WHITE);
+		lblBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
+		lblBookedSlots.setBounds(131, 71, 232, 50);
+		bookedSlotsPlayerPanel.add(lblBookedSlots);
+		
+		bookedSlotsPanelP = new JPanel();
+		bookedSlotsPanelP.setBackground(new Color(51, 153, 102));
+		bookedSlotsPanelP.setLayout(null);
+		
+		JScrollPane scrollPane_4 = new JScrollPane(bookedSlotsPanelP,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JLabel lblSlotDate = new JLabel("<html>Playground #1 Cairo<br>Slot #1    date: 22-22-2002   from: 12:20 am   to: 23:23 pm</html>");
+		lblSlotDate.setForeground(new Color(255, 204, 0));
+		lblSlotDate.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblSlotDate.setBounds(10, 11, 416, 45);
+		bookedSlotsPanelP.add(lblSlotDate);
+		
+		JButton btnCancelBooking = new JButton("Cancel Booking");
+		btnCancelBooking.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnCancelBooking.setBounds(51, 67, 151, 23);
+		bookedSlotsPanelP.add(btnCancelBooking);
+		
+		JButton btnInviteTeam = new JButton("Invite Team");
+		btnInviteTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnInviteTeam.setBounds(235, 67, 151, 23);
+		bookedSlotsPanelP.add(btnInviteTeam);
+		
+		JLabel lblSlotDate_2 = new JLabel("Slot #2    date: 22-22-2002   from: 12:20 am   to: 23:23 pm");
+		lblSlotDate_2.setForeground(new Color(255, 204, 0));
+		lblSlotDate_2.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblSlotDate_2.setBounds(10, 121, 416, 14);
+		bookedSlotsPanelP.add(lblSlotDate_2);
+		
+		JButton btnCancelBooking_1 = new JButton("Cancel Booking");
+		btnCancelBooking_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnCancelBooking_1.setBounds(51, 146, 151, 23);
+		bookedSlotsPanelP.add(btnCancelBooking_1);
+		
+		JButton btnInviteTeam_1 = new JButton("Invite Team");
+		btnInviteTeam_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnInviteTeam_1.setBounds(235, 146, 151, 23);
+		bookedSlotsPanelP.add(btnInviteTeam_1);
+		scrollPane_4.setBounds(33, 161, 438, 480);
+		bookedSlotsPlayerPanel.add(scrollPane_4);
 		
 		homePlayerPanel = new JPanel();
 		homePlayerPanel.setForeground(Color.BLACK);
@@ -2298,19 +2054,6 @@ public class system {
 		invalidLabel_8.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
 		invalidLabel_8.setBounds(33, 474, 123, 14);
 		profilePlayerPanel.add(invalidLabel_8);
-		
-		bookedSlotsPlayerPanel = new JPanel();
-		bookedSlotsPlayerPanel.setBounds(227, 0, 499, 652);
-		playerPanel.add(bookedSlotsPlayerPanel);
-		bookedSlotsPlayerPanel.setLayout(null);
-		bookedSlotsPlayerPanel.setForeground(Color.BLACK);
-		bookedSlotsPlayerPanel.setBackground(new Color(51, 153, 102));
-		
-		JLabel lblBookedSlots = new JLabel("Booked Slots");
-		lblBookedSlots.setForeground(Color.WHITE);
-		lblBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
-		lblBookedSlots.setBounds(136, 58, 232, 50);
-		bookedSlotsPlayerPanel.add(lblBookedSlots);
 		
 		teamPlayerPanel = new JPanel();
 		teamPlayerPanel.setLayout(null);

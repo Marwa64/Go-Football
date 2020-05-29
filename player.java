@@ -14,7 +14,7 @@ public class player extends user{
 	public void bookSlot(slot newSlot) {
 		bookedSlots.add(newSlot);
 	}
-	public void cancelBooking(slot slotToCancel) {
+	public void cancelBooking(int slotToCancel) {
 		bookedSlots.remove(slotToCancel);
 	}
 	public void addTeammate(String name, String email) {

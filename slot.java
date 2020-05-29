@@ -9,13 +9,14 @@ public class slot {
 		this.to= to;
 		this.date = date;
 		available = true;
-		player= "";
+		player = "";
 	}
 	public void book() {
 		available = false;
 	}
 	public void unBook() {
 		available = true;
+		player = "";
 	}
 	public boolean isBooked() {
 		return !(available);
