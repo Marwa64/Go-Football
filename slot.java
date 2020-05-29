@@ -1,12 +1,13 @@
 
 public class slot {
 	
-	private String from, to, player;
+	private String from, to, date, player;
 	private boolean available;
 	
-	public slot(String from, String to){
+	public slot(String from, String to, String date){
 		this.from = from;
 		this.to= to;
+		this.date = date;
 		available = true;
 		player= "";
 	}
@@ -17,13 +18,16 @@ public class slot {
 		available = true;
 	}
 	public boolean isBooked() {
-		return available;
+		return !(available);
 	}
 	public String getFrom() {
 		return from;
 	}
 	public String getTo() {
 		return to;
+	}
+	public String getDate() {
+		return date;
 	}
 	public void setPlayer(String player) {
 		this.player = player;
