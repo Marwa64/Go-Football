@@ -76,16 +76,11 @@ public class system {
 	private JPanel newTeammatePanel;
 	private JLabel errorMsgMoney;
 	private JLabel errorMsgBookedSlots;
-	
-	private static ArrayList<player> players = new ArrayList<player>(); // Contains all the players
-	private static ArrayList<playgroundOwner> owners = new ArrayList<playgroundOwner>(); // Contains all the playground owners
-	private ArrayList<slot> newSlots = new ArrayList<slot>();
-	private ArrayList<JLabel> newSlotLabels = new ArrayList<JLabel>();
-	private ArrayList<JButton> deleteSlotBtns = new ArrayList<JButton>();
-	private ArrayList<JButton> editPlaygroundBtns = new ArrayList<JButton>();
-	private static int currentUserID;
-	private static String currentUserType = "";
-	private int verificationCode, slotNum = 1;
+	private JPanel adminPanel;
+	private JPanel activePlaygroundsPanel;
+	private JPanel inactivePlaygroundsPanel;
+	private JPanel displayActivePlaygroundsPanel;
+	private JPanel displayInactivePlaygroundsPanel;
 	private JTextField nameProfileFieldO;
 	private JTextField emailProfileFieldO;
 	private JTextField locationProfileFieldO;
@@ -109,6 +104,17 @@ public class system {
 	private JTextField emailTeamField;
 	private JButton btnAddTeammate;
 	private JLabel errorMsgNewTeammate;
+	
+	private static ArrayList<player> players = new ArrayList<player>(); // Contains all the players
+	private static ArrayList<playgroundOwner> owners = new ArrayList<playgroundOwner>(); // Contains all the playground owners
+	private ArrayList<slot> newSlots = new ArrayList<slot>();
+	private ArrayList<JLabel> newSlotLabels = new ArrayList<JLabel>();
+	private ArrayList<JButton> deleteSlotBtns = new ArrayList<JButton>();
+	private ArrayList<JButton> editPlaygroundBtns = new ArrayList<JButton>();
+	private static int currentUserID;
+	private static String currentUserType = "";
+	private int verificationCode, slotNum = 1;
+	private static administrator admin = new administrator("admin@gofo.com", "admin"); // email is admin@gofo.com and password is admin
 	
 	/**
 	 * Launch the application.
@@ -227,6 +233,15 @@ public class system {
 					viewBookingsOwnerPanel.setVisible(false);
 					break;
 				}
+			}
+		}
+		if (found == false) {
+			if (admin.getEmail().equals(email) && admin.getPassword().equals(password)) {
+				tabbedPane.setSelectedComponent(adminPanel);
+				displayActivePlaygrounds();
+				activePlaygroundsPanel.setVisible(true);
+				inactivePlaygroundsPanel.setVisible(false);
+				found = true;
 			}
 		}
 		if (found == false) {
@@ -436,7 +451,7 @@ public class system {
 		int slotNum = 0, currentSlotNum = 0, gap = 0;
 		for (int ownerIndex = 0; ownerIndex < owners.size(); ownerIndex++) {
 			for (int playgroundIndex = 0; playgroundIndex < owners.get(ownerIndex).playgrounds.size(); playgroundIndex++) {
-				if (owners.get(ownerIndex).playgrounds.get(playgroundIndex).getLocation().contains(location)) {
+				if ((owners.get(ownerIndex).playgrounds.get(playgroundIndex).getStatus() == true) && (owners.get(ownerIndex).playgrounds.get(playgroundIndex).getLocation().contains(location))) {
 					currentSlotNum = 0;
 					JLabel playerground = new JLabel("Playground #" + (playgroundIndex+1) + " " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getName());
 					playerground.setForeground(Color.WHITE);
@@ -640,7 +655,7 @@ public class system {
 		bookedSlotsPanelP.revalidate();
 		bookedSlotsPanelP.repaint();
 	}
-	void displayTeammates() {
+	public void displayTeammates() {
 		teammatesPanel.removeAll();
 		for (int i = 0; i < players.get(currentUserID).team.get(0).size(); i++) {
 			JLabel lblTeammate = new JLabel("<html><span style='color:black;'>Teammate #" + (i+1) + "</span><br>&nbsp Name: " +  players.get(currentUserID).team.get(0).get(i) + "<br>&nbsp Email:" + players.get(currentUserID).team.get(1).get(i) + "</html>");
@@ -666,6 +681,94 @@ public class system {
 		teammatesPanel.revalidate();
 		teammatesPanel.repaint();
 	}
+	public void displayActivePlaygrounds() {
+		displayActivePlaygroundsPanel.removeAll();
+		int playgroundNum = 0;
+		for (int ownerIndex = 0; ownerIndex < owners.size(); ownerIndex++) {
+			for (int playgroundIndex = 0; playgroundIndex < owners.get(ownerIndex).playgrounds.size(); playgroundIndex++) {
+				if (owners.get(ownerIndex).playgrounds.get(playgroundIndex).getStatus() == true) {
+					JLabel lblPlayground = new JLabel("<html>Playground #" + (playgroundNum+1) + " &nbsp <span style='color:#FFC107'>" + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getName() + "</span><br> &nbsp &nbsp Size: <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getSize() + " </span> <br>&nbsp &nbsp Price/Slot:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getPrice() + " </span> <br>&nbsp &nbsp Cancellation Period:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getCancellationPeriod() + " </span> <br>&nbsp &nbsp Location:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getLocation() + " </span></html>");
+					lblPlayground.setVerticalAlignment(SwingConstants.TOP);
+					lblPlayground.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+					lblPlayground.setBounds(10, 11+(178*playgroundNum), 416, 108);
+					displayActivePlaygroundsPanel.add(lblPlayground);
+					int currentOwner = ownerIndex, currentPlayground = playgroundIndex;
+					JButton btnDeactivate = new JButton("Deactivate");
+					btnDeactivate.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							admin.deactivatePlayground(owners.get(currentOwner).playgrounds.get(currentPlayground));
+							displayActivePlaygrounds();
+						}
+					});
+					btnDeactivate.setForeground(Color.WHITE);
+					btnDeactivate.setBackground(Color.BLACK);
+					btnDeactivate.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+					btnDeactivate.setBounds(63, 126+(178*playgroundNum), 132, 23);
+					displayActivePlaygroundsPanel.add(btnDeactivate);
+					JButton btnDelete = new JButton("Delete");
+					btnDelete.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							owners.get(currentOwner).playgrounds.remove(currentPlayground);
+							displayActivePlaygrounds();
+						}
+					});
+					btnDelete.setForeground(Color.WHITE);
+					btnDelete.setBackground(Color.BLACK);
+					btnDelete.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+					btnDelete.setBounds(259, 126+(178*playgroundNum), 132, 23);
+					displayActivePlaygroundsPanel.add(btnDelete);
+					playgroundNum++;
+					displayActivePlaygroundsPanel.setPreferredSize(new Dimension(150, 100 * playgroundNum));
+				}
+			}
+		}
+		displayActivePlaygroundsPanel.revalidate();
+		displayActivePlaygroundsPanel.repaint();
+	}
+	public void displayInactivePlaygrounds() {
+		displayInactivePlaygroundsPanel.removeAll();
+		int playgroundNum = 0;
+		for (int ownerIndex = 0; ownerIndex < owners.size(); ownerIndex++) {
+			for (int playgroundIndex = 0; playgroundIndex < owners.get(ownerIndex).playgrounds.size(); playgroundIndex++) {
+				if (owners.get(ownerIndex).playgrounds.get(playgroundIndex).getStatus() == false) {
+					JLabel lblPlayground = new JLabel("<html>Playground #" + (playgroundNum+1) + " &nbsp <span style='color:#FFC107'>" + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getName() + "</span><br> &nbsp &nbsp Size: <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getSize() + " </span> <br>&nbsp &nbsp Price/Slot:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getPrice() + " </span> <br>&nbsp &nbsp Cancellation Period:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getCancellationPeriod() + " </span> <br>&nbsp &nbsp Location:  <span style='color:#FFC107'> " + owners.get(ownerIndex).playgrounds.get(playgroundIndex).getLocation() + " </span></html>");
+					lblPlayground.setVerticalAlignment(SwingConstants.TOP);
+					lblPlayground.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+					lblPlayground.setBounds(10, 11+(178*playgroundNum), 416, 108);
+					displayInactivePlaygroundsPanel.add(lblPlayground);
+					int currentOwner = ownerIndex, currentPlayground = playgroundIndex;
+					JButton btnActivate = new JButton("Activate");
+					btnActivate.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							admin.activatePlayground(owners.get(currentOwner).playgrounds.get(currentPlayground));
+							displayInactivePlaygrounds();
+						}
+					});
+					btnActivate.setForeground(Color.WHITE);
+					btnActivate.setBackground(Color.BLACK);
+					btnActivate.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+					btnActivate.setBounds(63, 126+(178*playgroundNum), 132, 23);
+					displayInactivePlaygroundsPanel.add(btnActivate);
+					JButton btnDelete = new JButton("Delete");
+					btnDelete.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							owners.get(currentOwner).playgrounds.remove(currentPlayground);
+							displayInactivePlaygrounds();
+						}
+					});
+					btnDelete.setForeground(Color.WHITE);
+					btnDelete.setBackground(Color.BLACK);
+					btnDelete.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+					btnDelete.setBounds(259, 126+(178*playgroundNum), 132, 23);
+					displayInactivePlaygroundsPanel.add(btnDelete);
+					playgroundNum++;
+					displayInactivePlaygroundsPanel.setPreferredSize(new Dimension(150, 100 * playgroundNum));
+				}
+			}
+		}
+		displayInactivePlaygroundsPanel.revalidate();
+		displayInactivePlaygroundsPanel.repaint();
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -682,6 +785,7 @@ public class system {
 		
 		JPanel startupPanel= new JPanel();
 		startupPanel.setBackground(new Color(51, 153, 102));
+		startupPanel.setLayout(null);
 		JPanel loginPanel = new JPanel();
 		loginPanel.setBackground(new Color(0, 102, 51));
 		JPanel signupPanel = new JPanel();
@@ -694,7 +798,8 @@ public class system {
 		playerPanel = new JPanel();
 		playerPanel.setBackground(new Color(51, 153, 102));
 		tabbedPane.addTab("Start up", null, startupPanel, null);
-		startupPanel.setLayout(null);
+		adminPanel = new JPanel();
+		adminPanel.setBackground(new Color(51, 153, 102));
 		
 		JButton btnLogIn = new JButton("Log in");
 		btnLogIn.addActionListener(new ActionListener() {
@@ -938,7 +1043,7 @@ public class system {
 		
 		JLabel lblGo = new JLabel("<html><div style='text-align: center;'>Go Football</div></html>", SwingConstants.CENTER);
 		lblGo.setForeground(new Color(255, 255, 255));
-		lblGo.setFont(new Font("Showcard Gothic", Font.PLAIN, 35));
+		lblGo.setFont(new Font("Showcard Gothic", Font.PLAIN, 37));
 		lblGo.setBounds(10, 0, 205, 138);
 		menuOwnerPanel.add(lblGo);
 		
@@ -954,7 +1059,7 @@ public class system {
 		});
 		btnOHome.setForeground(new Color(255, 255, 255));
 		btnOHome.setBackground(new Color(0, 0, 0));
-		btnOHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnOHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnOHome.setBounds(10, 174, 205, 49);
 		menuOwnerPanel.add(btnOHome);
 		
@@ -970,7 +1075,7 @@ public class system {
 		});
 		btnOProfile.setForeground(new Color(255, 255, 255));
 		btnOProfile.setBackground(new Color(0, 0, 0));
-		btnOProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnOProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnOProfile.setBounds(10, 246, 205, 49);
 		menuOwnerPanel.add(btnOProfile);
 		
@@ -985,7 +1090,7 @@ public class system {
 		});
 		btnOAddPlayground.setForeground(new Color(255, 255, 255));
 		btnOAddPlayground.setBackground(new Color(0, 0, 0));
-		btnOAddPlayground.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnOAddPlayground.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnOAddPlayground.setBounds(10, 319, 205, 49);
 		menuOwnerPanel.add(btnOAddPlayground);
 		
@@ -1001,7 +1106,7 @@ public class system {
 		});
 		btnOViewBookings.setForeground(new Color(255, 255, 255));
 		btnOViewBookings.setBackground(new Color(0, 0, 0));
-		btnOViewBookings.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnOViewBookings.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnOViewBookings.setBounds(10, 397, 205, 49);
 		menuOwnerPanel.add(btnOViewBookings);
 		
@@ -1027,7 +1132,7 @@ public class system {
 				tabbedPane.setSelectedComponent(startupPanel);
 			}
 		});
-		btnOLogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnOLogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnOLogOut.setBounds(10, 528, 205, 49);
 		menuOwnerPanel.add(btnOLogOut);
 		
@@ -1575,7 +1680,7 @@ public class system {
 		
 		JLabel lblGo_1 = new JLabel("<html><div style='text-align: center;'>Go Football</div></html>", SwingConstants.CENTER);
 		lblGo_1.setForeground(Color.WHITE);
-		lblGo_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 35));
+		lblGo_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 37));
 		lblGo_1.setBounds(10, 0, 205, 138);
 		menuPlayerPanel.add(lblGo_1);
 		
@@ -1591,7 +1696,7 @@ public class system {
 			}
 		});
 		btnPHome.setForeground(Color.WHITE);
-		btnPHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnPHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnPHome.setBackground(Color.BLACK);
 		btnPHome.setBounds(10, 174, 205, 49);
 		menuPlayerPanel.add(btnPHome);
@@ -1607,7 +1712,7 @@ public class system {
 			}
 		});
 		btnPProfile.setForeground(Color.WHITE);
-		btnPProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnPProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnPProfile.setBackground(Color.BLACK);
 		btnPProfile.setBounds(10, 246, 205, 49);
 		menuPlayerPanel.add(btnPProfile);
@@ -1624,7 +1729,7 @@ public class system {
 			}
 		});
 		btnPBookedSlots.setForeground(Color.WHITE);
-		btnPBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnPBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnPBookedSlots.setBackground(Color.BLACK);
 		btnPBookedSlots.setBounds(10, 319, 205, 49);
 		menuPlayerPanel.add(btnPBookedSlots);
@@ -1640,7 +1745,7 @@ public class system {
 			}
 		});
 		btnPTeam.setForeground(Color.WHITE);
-		btnPTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnPTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnPTeam.setBackground(Color.BLACK);
 		btnPTeam.setBounds(10, 397, 205, 49);
 		menuPlayerPanel.add(btnPTeam);
@@ -1661,7 +1766,7 @@ public class system {
 			}
 		});
 		btnPLogOut.setForeground(Color.WHITE);
-		btnPLogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnPLogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		btnPLogOut.setBackground(Color.BLACK);
 		btnPLogOut.setBounds(10, 528, 205, 49);
 		menuPlayerPanel.add(btnPLogOut);
@@ -2262,5 +2367,146 @@ public class system {
 		walletProfileLabel_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
 		walletProfileLabel_1_1.setBounds(243, 414, 86, 20);
 		profilePlayerPanel.add(walletProfileLabel_1_1);;
+		
+		tabbedPane.addTab("Admin", null, adminPanel, null);
+		adminPanel.setLayout(null);
+		
+		JPanel menuAdminPanel = new JPanel();
+		menuAdminPanel.setLayout(null);
+		menuAdminPanel.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 0), new Color(0, 0, 0), new Color(0, 0, 0), new Color(0, 0, 0)));
+		menuAdminPanel.setBackground(new Color(0, 102, 51));
+		menuAdminPanel.setBounds(0, 0, 227, 675);
+		adminPanel.add(menuAdminPanel);
+		
+		JLabel lblGo_1_1 = new JLabel("<html><div style='text-align: center;'>Go Football</div></html>", SwingConstants.CENTER);
+		lblGo_1_1.setForeground(Color.WHITE);
+		lblGo_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 37));
+		lblGo_1_1.setBounds(10, 11, 205, 138);
+		menuAdminPanel.add(lblGo_1_1);
+		
+		JButton btnActivePlaygrounds = new JButton("<html><div style='text-align: center;'>Active Playgrounds</div></html>");
+		btnActivePlaygrounds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				displayActivePlaygrounds();
+				activePlaygroundsPanel.setVisible(true);
+				inactivePlaygroundsPanel.setVisible(false);
+			}
+		});
+		btnActivePlaygrounds.setVerticalAlignment(SwingConstants.TOP);
+		btnActivePlaygrounds.setForeground(Color.WHITE);
+		btnActivePlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
+		btnActivePlaygrounds.setBackground(Color.BLACK);
+		btnActivePlaygrounds.setBounds(10, 221, 205, 59);
+		menuAdminPanel.add(btnActivePlaygrounds);
+		
+		JButton btnALogOut = new JButton("Log Out");
+		btnALogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Reset login and sign up text fields
+				emailLoginField.setText("");
+				passwordLoginField.setText("");
+				nameSignupField.setText("");
+				emailSignupField.setText("");
+				passwordSignupField.setText("");
+				errorMsgLogin.setText("");
+				errorMsgSignup.setText("");
+				// Go back to start up page
+				tabbedPane.setSelectedComponent(startupPanel);
+			}
+		});
+		btnALogOut.setForeground(Color.WHITE);
+		btnALogOut.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
+		btnALogOut.setBackground(Color.BLACK);
+		btnALogOut.setBounds(10, 528, 205, 49);
+		menuAdminPanel.add(btnALogOut);
+		
+		JButton btninactivePlaygrounds = new JButton("<html><div style='text-align: center;'>Inactive Playgrounds</div></html>");
+		btninactivePlaygrounds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayInactivePlaygrounds();
+				inactivePlaygroundsPanel.setVisible(true);
+				activePlaygroundsPanel.setVisible(false);
+			}
+		});
+		btninactivePlaygrounds.setVerticalAlignment(SwingConstants.TOP);
+		btninactivePlaygrounds.setForeground(Color.WHITE);
+		btninactivePlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
+		btninactivePlaygrounds.setBackground(Color.BLACK);
+		btninactivePlaygrounds.setBounds(10, 324, 205, 59);
+		menuAdminPanel.add(btninactivePlaygrounds);
+		
+		inactivePlaygroundsPanel = new JPanel();
+		inactivePlaygroundsPanel.setLayout(null);
+		inactivePlaygroundsPanel.setForeground(Color.BLACK);
+		inactivePlaygroundsPanel.setBackground(new Color(51, 153, 102));
+		inactivePlaygroundsPanel.setBounds(227, 0, 499, 652);
+		adminPanel.add(inactivePlaygroundsPanel);
+		
+		JLabel lblInactivePlaygrounds = new JLabel("Inactive Playgrounds");
+		lblInactivePlaygrounds.setForeground(Color.WHITE);
+		lblInactivePlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 28));
+		lblInactivePlaygrounds.setBounds(78, 78, 360, 50);
+		inactivePlaygroundsPanel.add(lblInactivePlaygrounds);
+		
+		displayInactivePlaygroundsPanel = new JPanel();
+		displayInactivePlaygroundsPanel.setBackground(new Color(51, 153, 102));
+		displayInactivePlaygroundsPanel.setLayout(null);
+		
+		JScrollPane scrollPane_7 = new JScrollPane(displayInactivePlaygroundsPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_7.setBounds(33, 161, 438, 442);
+		inactivePlaygroundsPanel.add(scrollPane_7);
+		
+		activePlaygroundsPanel = new JPanel();
+		activePlaygroundsPanel.setLayout(null);
+		activePlaygroundsPanel.setForeground(Color.BLACK);
+		activePlaygroundsPanel.setBackground(new Color(51, 153, 102));
+		activePlaygroundsPanel.setBounds(227, 0, 499, 652);
+		adminPanel.add(activePlaygroundsPanel);
+		
+		JLabel lblActivePlaygrounds = new JLabel("Active Playgrounds");
+		lblActivePlaygrounds.setForeground(Color.WHITE);
+		lblActivePlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 28));
+		lblActivePlaygrounds.setBounds(95, 78, 323, 50);
+		activePlaygroundsPanel.add(lblActivePlaygrounds);
+		
+		displayActivePlaygroundsPanel = new JPanel();
+		displayActivePlaygroundsPanel.setBackground(new Color(51, 153, 102));
+		displayActivePlaygroundsPanel.setLayout(null);
+		
+		JScrollPane scrollPane_6 = new JScrollPane(displayActivePlaygroundsPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JLabel lblPlayground = new JLabel("<html>Playground #1 &nbsp <span style='color:#FFC107'> Name</span><br> &nbsp &nbsp Size: <span style='color:#FFC107'> 45</span> <br>&nbsp &nbsp Price/Slot:  <span style='color:#FFC107'> 1</span> <br>&nbsp &nbsp Cancellation Period:  <span style='color:#FFC107'> 3 </span> <br>&nbsp &nbsp Location:  <span style='color:#FFC107'> Maadi </span></html>");
+		lblPlayground.setVerticalAlignment(SwingConstants.TOP);
+		lblPlayground.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblPlayground.setBounds(10, 11, 416, 108);
+		displayActivePlaygroundsPanel.add(lblPlayground);
+		
+		JButton btnDeactivate = new JButton("Deactivate");
+		btnDeactivate.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDeactivate.setBounds(63, 126, 132, 23);
+		displayActivePlaygroundsPanel.add(btnDeactivate);
+		
+		JButton btnDelete_2 = new JButton("Delete");
+		btnDelete_2.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDelete_2.setBounds(259, 126, 132, 23);
+		displayActivePlaygroundsPanel.add(btnDelete_2);
+		
+		JLabel lblPlayground_1 = new JLabel("<html>Playground #1 &nbsp <span style='color:#FFC107'> Name</span><br> &nbsp &nbsp Size: <span style='color:#FFC107'> 45</span> <br>&nbsp &nbsp Price/Slot:  <span style='color:#FFC107'> 1</span> <br>&nbsp &nbsp Cancellation Period:  <span style='color:#FFC107'> 3 </span> <br>&nbsp &nbsp Location:  <span style='color:#FFC107'> Maadi </span></html>");
+		lblPlayground_1.setVerticalAlignment(SwingConstants.TOP);
+		lblPlayground_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblPlayground_1.setBounds(10, 189, 416, 108);
+		displayActivePlaygroundsPanel.add(lblPlayground_1);
+		
+		JButton btnDeactivate_1 = new JButton("Deactivate");
+		btnDeactivate_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDeactivate_1.setBounds(63, 304, 132, 23);
+		displayActivePlaygroundsPanel.add(btnDeactivate_1);
+		
+		JButton btnDelete_2_1 = new JButton("Delete");
+		btnDelete_2_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDelete_2_1.setBounds(259, 304, 132, 23);
+		displayActivePlaygroundsPanel.add(btnDelete_2_1);
+		scrollPane_6.setBounds(33, 161, 438, 442);
+		activePlaygroundsPanel.add(scrollPane_6);
 	}
 }
