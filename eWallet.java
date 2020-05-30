@@ -18,7 +18,7 @@ public class eWallet {
 	public void withdraw(double amount) {
 		balance = balance - amount;
 	}
-	public void deposite(double amount) {
+	public void deposit(double amount) {
 		balance = balance + amount;
 	}
 }
