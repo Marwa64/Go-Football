@@ -8,102 +8,38 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.swing.border.BevelBorder;
 
+
+/**
+ * This is the GoFo system that handles the GUI and most of the functions
+ */
 public class system {
 
 	private JFrame frame;
 	private JTabbedPane tabbedPane;
-	private JPanel verificationPanel;
-	private JPanel OwnerPanel;
-	private JPanel profileOwnerPanel;
-	private JPanel homeOwnerPanel;
-	private JPanel addPlaygroundOwnerPanel;
-	private JPanel viewBookingsOwnerPanel;
-	private JTextField emailLoginField;
-	private JPasswordField passwordLoginField;
-	private JTextField nameSignupField;
-	private JTextField emailSignupField;
-	private JPasswordField passwordSignupField;
+	private JPanel verificationPanel, OwnerPanel, profileOwnerPanel, homeOwnerPanel, addPlaygroundOwnerPanel, viewBookingsOwnerPanel;
+	private JTextField emailLoginField, nameSignupField, emailSignupField;;
+	private JPasswordField passwordLoginField, passwordSignupField;
 	private JComboBox typeSignupCombo;
-	private JLabel errorMsgSignup;
-	private JLabel errorMsgLogin;
-	private JLabel errorMsgVerification;
+	private JLabel errorMsgSignup, errorMsgLogin, errorMsgVerification;
 	private JTextField verificationCodeField;
-	private JPanel newSlotsPanel;
+	private JPanel newSlotsPanel, playgroundsOwnerPanel;;
 	private JTextField namePlaygroundField;
 	private JTextArea desciptionPlaygroundField;
-	private JTextField sizePlaygroundField;
-	private JTextField pricePlaygroundField;
-	private JTextField cancellationPlaygroundField;
-	private JTextField locationPlaygroundField;
-	private JTextField fromField;
-	private JTextField toField;
-	private JLabel errorMsgNewPlayground;
-	private JLabel invalidLabel;
-	private JLabel invalidLabel_1;
-	private JLabel invalidLabel_2;
-	private JPanel playgroundsOwnerPanel;
-	private JButton btnUpdateO;
-	private JLabel errorMsgProfile;
-	private JButton btnDepositO;
-	private JButton btnWithdrawO;
-	private JLabel invalidLabel_6;
-	private JLabel invalidLabel_7;
-	private JPanel playerPanel;
-	private JPanel playgroundsPlayerPanel;
-	private JPanel homePlayerPanel;
-	private JPanel profilePlayerPanel;
-	private JPanel bookedSlotsPlayerPanel;
-	private JPanel teamPlayerPanel;
-	private JPanel infoPanel;
-	private JLabel playgroundNameInfoLabel;
-	private JLabel emailInfoLabel;
-	private JLabel sizeInfoLabel;
-	private JLabel priceInfoLabel;
-	private JLabel cancelInfoLabel;
+	private JTextField sizePlaygroundField, pricePlaygroundField, cancellationPlaygroundField, locationPlaygroundField, fromField, toField;
+	private JLabel errorMsgNewPlayground, invalidLabel, invalidLabel_1, invalidLabel_2;
+	private JButton btnUpdateO,btnDepositO, btnWithdrawO;;
+	private JLabel errorMsgProfile, invalidLabel_6, invalidLabel_7;
+	private JPanel playerPanel, playgroundsPlayerPanel, homePlayerPanel, profilePlayerPanel, bookedSlotsPlayerPanel, teamPlayerPanel, infoPanel;
+	private JLabel playgroundNameInfoLabel, emailInfoLabel, sizeInfoLabel, priceInfoLabel, cancelInfoLabel;
 	private JTextArea descriptionInfoLabel;
-	private JLabel locationInfoLabel;
-	private JLabel ownerNameInfoLabel;
-	private JLabel numberInfoLabel;
-	private JButton btnDepositP;
-	private JButton btnWithdrawP;
-	private JButton btnUpdateP;
-	private JLabel errorMsgProfile_1;
-	private JLabel invalidLabel_8;
-	private JLabel invalidLabel_9;
-	private JPanel bookedSlotsPanelP;
-	private JPanel bookedSlotsPanelO;
-	private JPanel teammatesPanel;
-	private JPanel newTeammatePanel;
-	private JLabel errorMsgMoney;
-	private JLabel errorMsgBookedSlots;
-	private JPanel adminPanel;
-	private JPanel activePlaygroundsPanel;
-	private JPanel inactivePlaygroundsPanel;
-	private JPanel displayActivePlaygroundsPanel;
-	private JPanel displayInactivePlaygroundsPanel;
-	private JTextField nameProfileFieldO;
-	private JTextField emailProfileFieldO;
-	private JTextField locationProfileFieldO;
-	private JTextField walletProfileFieldO;
-	private JTextField numberProfileFieldO;
-	private JTextField depositField;
-	private JTextField withdrawField;
-	private JTextField locationSearchField;
-	private JTextField fromSearchField;
-	private JTextField toSearchField;
-	private JTextField dateSearchField;
-	private JTextField dateField;
-	private JTextField nameProfileFieldP;
-	private JTextField emailProfileFieldP;
-	private JTextField numberProfileFieldP;
-	private JTextField locationProfileFieldP;
-	private JTextField walletProfileFieldP;
-	private JTextField depositField2;
-	private JTextField withdrawField2;
-	private JTextField nameTeamField;
-	private JTextField emailTeamField;
-	private JButton btnAddTeammate;
-	private JLabel errorMsgNewTeammate;
+	private JLabel locationInfoLabel, ownerNameInfoLabel, numberInfoLabel;
+	private JButton btnDepositP, btnWithdrawP, btnUpdateP, btnAddTeammate;;
+	private JLabel errorMsgProfile_1, invalidLabel_8, invalidLabel_9, errorMsgNewTeammate, errorMsgMoney, errorMsgBookedSlots;
+	private JPanel bookedSlotsPanelP, bookedSlotsPanelO, teammatesPanel, newTeammatePanel;
+	private JPanel adminPanel, activePlaygroundsPanel, inactivePlaygroundsPanel, displayActivePlaygroundsPanel, displayInactivePlaygroundsPanel;
+	private JTextField nameProfileFieldO, emailProfileFieldO, locationProfileFieldO, walletProfileFieldO, numberProfileFieldO, depositField;
+	private JTextField withdrawField, locationSearchField, fromSearchField, toSearchField, dateSearchField, dateField, nameProfileFieldP, emailProfileFieldP;
+	private JTextField numberProfileFieldP, locationProfileFieldP, walletProfileFieldP, depositField2, withdrawField2, nameTeamField, emailTeamField;
 	
 	private static ArrayList<player> players = new ArrayList<player>(); // Contains all the players
 	private static ArrayList<playgroundOwner> owners = new ArrayList<playgroundOwner>(); // Contains all the playground owners
@@ -138,7 +74,14 @@ public class system {
 	public system() {
 		initialize();
 	}
-	// Validates the sign up data. If the data is valid it'll create a new user, otherwise it'll display an error message
+	/**
+	 * The validateUserData method validates the sign up data.
+	 * If the data is valid it'll generate a random 4 digit code and send it to the user's email then take the user to the verification panel,
+	 * otherwise it'll display an error message.
+	 * @param name this is the name entered by the user when signing up
+	 * @param email this is the email entered by the user when signing up
+	 * @param password this is the password entered by the user when signing up
+	 */
 	public void validateUserData(String name, String email, String password) {
 		if (name.equals("")) {
 			errorMsgSignup.setText("Enter your username");
@@ -157,6 +100,12 @@ public class system {
 			tabbedPane.setSelectedComponent(verificationPanel);
 		}
 	}
+	/**
+	 * The sendMail method sends an email using the JavaMail API
+	 * @param email this is the email of the user we're going to be sending an email to
+	 * @param subject the is the subject of the email
+	 * @param content this is the content of the email
+	 */
 	public void sendMail(String email, String subject, String content) {
         Properties properties = new Properties();    
         properties.put("mail.smtp.host", "smtp.gmail.com");    
@@ -183,7 +132,13 @@ public class system {
          System.out.println("message sent successfully");  
         } catch (MessagingException e) {throw new RuntimeException(e);}    
 	}
-	// Checks whether the new user is a player or playground owner the creates the suitable object and adds it to the array list
+	/**
+	 * The createUser method checks whether the new user is a player or playground owner
+	 * then creates the suitable object and adds it's to the array list
+	 * @param name this is the name of the user
+	 * @param email this is the email of the user
+	 * @param password the is the password of the user
+	 */
 	public void createUser(String name, String email, String password) {
 		String accountType = (String) typeSignupCombo.getSelectedItem();
 		System.out.print(accountType);
@@ -197,7 +152,14 @@ public class system {
 			owners.add(newOwner);
 		}
 	}
-	// Checks if the email and password exist in the owners array list or players array list then takes the user to the appropriate screen
+	/**
+	 * The login method checks if the email and password exist in the owners array list or players array list 
+	 * or if the email and password belong to the administrator.
+	 * Once it finds an account that matches the email and password it takes the user to the appropriate screen.
+	 * If the email and password don't match any account an error message will be displayed.
+	 * @param email this is the email the user entered when logging in
+	 * @param password this is the password the user entered when logging in
+	 */
 	public void login(String email, String password) {
 		System.out.println("Log in email: " + email + "   Log in password: " + password);
 		boolean found = false;
@@ -249,7 +211,11 @@ public class system {
 			errorMsgLogin.setText("Incorrect email or password");
 		}
 	}
-	// Checks if the user left any empty fields then if everything is correct adds the playground to the owner and resets the fields
+	/**
+	 * The validatePlaygroundInfo method checks if the user left any empty fields and if the user added at least 1 slot,
+	 * if everything is correct adds the playground to the owner and resets the fields.
+	 * Otherwise an error message is displayed
+	 */
 	void validatePlaygroundInfo(){
 		if (namePlaygroundField.getText().equals("")) {
 			errorMsgNewPlayground.setText("Enter the playground name");
@@ -296,6 +262,9 @@ public class system {
 			slotNum = 1;
 		}
 	}
+	/**
+	 * The displayOwnerPlaygrounds method loops around all the current user's playgrounds and displays them all on the panel
+	 */
 	public void displayOwnerPlaygrounds() {
 		editPlaygroundBtns.clear();
 		playgroundsOwnerPanel.removeAll();
@@ -310,7 +279,7 @@ public class system {
 			slotScrollPane.setBounds(74, 241 + (325* i), 329, 61);
 			playgroundsOwnerPanel.add(slotScrollPane);
 			JLabel namelabel = new JLabel ("Playground #" + (i+1) + " " +  owners.get(currentUserID).playgrounds.get(i).getName());
-			namelabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+			namelabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
 			namelabel.setBounds(10, 11 + (325*i), 302, 14);
 			playgroundsOwnerPanel.add(namelabel);
 			
@@ -368,7 +337,12 @@ public class system {
 		playgroundsOwnerPanel.revalidate();
 		playgroundsOwnerPanel.repaint();
 	}
-	// Gets the owner details and puts them in the appropriate fields
+	/**
+	 * The ownerProfile method gets the current playground owner's details and puts them in the appropriate fields.
+	 * It adds a deposit button which can be used to deposit money into the current playground owner's wallet and a withdraw button to
+	 * withdraw money from the wallet. It also adds an update button which when pressed updates the current playground owner's info
+	 * with all data from the appropriate fields then resets these fields.
+	 */
 	public void ownerProfile() {
 		nameProfileFieldO.setText(owners.get(currentUserID).getName());
 		emailProfileFieldO.setText(owners.get(currentUserID).getEmail());
@@ -427,6 +401,10 @@ public class system {
 			}
 		});
 	}
+	/**
+	 * The ownerBookedSlots method loops through the current playground owner's playgrounds
+	 * and displays all the booked slots in each playground
+	 */
 	public void ownerBookedSlots() {
 		bookedSlotsPanelO.removeAll();
 		// Loops through the owner's playgrounds
@@ -438,7 +416,7 @@ public class system {
 					JLabel newSlot = new JLabel("<html>Playground #" + (i+1) + "  Slot #" + (j+1) + " - From: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getFrom() + "  To: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getTo() + "   Date: " +  owners.get(currentUserID).playgrounds.get(i).slots.get(j).getDate() + "  <br><span style='color:black;'>Player: " + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getPlayer().getName() + "&nbsp &nbsp Email:" + owners.get(currentUserID).playgrounds.get(i).slots.get(j).getPlayer().getEmail() + "</span></html>");
 					newSlot.setForeground(new Color(255, 204, 0));
 					newSlot.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
-					newSlot.setBounds(10, 11 +(70*slotGap), 427, 55);
+					newSlot.setBounds(10, 11 +(150*slotGap), 427, 75);
 					bookedSlotsPanelO.add(newSlot);
 					slotGap++;
 					bookedSlotsPanelO.setPreferredSize(new Dimension(150, 70 * slotGap));
@@ -446,6 +424,17 @@ public class system {
 			}
 		}
 	}
+	/**
+	 * The displayAllPlaygrounds method loops through all the owners and displays each owner's active playgrounds with all it's slots. If the user 
+	 * filtered the playgrounds by location it displays only the playgrounds that contain that location, and the same thing applies to the time and date of the slots.
+	 * It adds a ViewInfo button next to each playground, when clicked it shows a panel that has all the playgrounds information.
+	 * It also adds a book button next to each slot, when clicked it changes the availability of that slot to false and adds the slot to the 
+	 * current player's bookedSlots array list.
+	 * @param location this is the location of the playground the player searched for
+	 * @param from this is the time the slot begins from that the player searched for
+	 * @param to this is the time the slot ends at that the player searched for
+	 * @param date this is the date of the slot that the player searched for
+	 */
 	public void displayAllPlaygrounds(String location, String from, String to, String date) {
 		playgroundsPlayerPanel.removeAll();
 		int slotNum = 0, currentSlotNum = 0, gap = 0;
@@ -524,7 +513,12 @@ public class system {
 		playgroundsPlayerPanel.revalidate();
 		playgroundsPlayerPanel.repaint();
 	}
-	// Gets the owner details and puts them in the appropriate fields
+	/**
+	 * The playerProfile method gets the current player's details and puts them in the appropriate fields.
+	 * It adds a deposit button which can be used to deposit money into the current player's wallet and a withdraw button to
+	 * withdraw money from the wallet. It also adds an update button which when pressed updates the current player's info
+	 * with all data from the appropriate fields then resets these fields.
+	 */
 	public void playerProfile() {
 		nameProfileFieldP.setText(players.get(currentUserID).getName());
 		emailProfileFieldP.setText(players.get(currentUserID).getEmail());
@@ -583,6 +577,11 @@ public class system {
 			}
 		});
 	}
+	/**
+	 * The playerBookedSlots method loops through the current player's booked slots and displays them all. Under each slot it adds a
+	 * Cancel Booking button which when clicked changes the availability of that slot to true and removes the slot from the player's bookedSlots array list.
+	 * It also adds an Invite Team button which when clicked loops through the player's team and send invitation e-mails to all of them using the sendMail method.
+	 */
 	public void playerBookedSlots() {
 		bookedSlotsPanelP.removeAll();
 		for (int i = 0; i < players.get(currentUserID).bookedSlots.size(); i++) {
@@ -637,7 +636,7 @@ public class system {
 						errorMsgBookedSlots.setText("No Teammates to invite");
 					} else {
 						for (int i = 0; i < players.get(currentUserID).team.get(0).size(); i++) {
-							String content = "<html><h1>You have been invited!</h1><br> Dear " + players.get(currentUserID).team.get(0).get(i) + ", <br>"+ "&nbsp &nbsp <b>" + players.get(currentUserID).getName() +" </b> has invited you to join them in playing football on " + players.get(currentUserID).bookedSlots.get(currentSlot).getDate() +" from " + players.get(currentUserID).bookedSlots.get(currentSlot).getFrom() + " to " + players.get(currentUserID).bookedSlots.get(currentSlot).getTo() + "<br> Let them know if you'll be able to make it! </html>";
+							String content = "<html><h1>You have been invited!</h1><br> Dear " + players.get(currentUserID).team.get(0).get(i) + ", <br>"+ "<b> " + players.get(currentUserID).getName() +" </b> has invited you to join them in playing football on " + players.get(currentUserID).bookedSlots.get(currentSlot).getDate() +" from " + players.get(currentUserID).bookedSlots.get(currentSlot).getFrom() + " to " + players.get(currentUserID).bookedSlots.get(currentSlot).getTo() + "<br> Let them know if you'll be able to make it! </html>";
 							sendMail(players.get(currentUserID).team.get(1).get(i), "GoFo Invitation", content);
 						}
 						errorMsgBookedSlots.setText("<html><span style='color:green;'>Invitations have been sent</span></html>");
@@ -655,6 +654,10 @@ public class system {
 		bookedSlotsPanelP.revalidate();
 		bookedSlotsPanelP.repaint();
 	}
+	/**
+	 * The displayTeammates method loops through the current player's team array list and displays their names and e-mails.
+	 * It also adds a Remove button next to each team mate which removes that team mate from the array list.
+	 */
 	public void displayTeammates() {
 		teammatesPanel.removeAll();
 		for (int i = 0; i < players.get(currentUserID).team.get(0).size(); i++) {
@@ -664,23 +667,28 @@ public class system {
 			lblTeammate.setBounds(10, 11 + (107 * i), 426, 75);
 			teammatesPanel.add(lblTeammate);
 			int currentTeammate = i;
-			JButton btnDelete = new JButton("Remove");
-			btnDelete.addActionListener(new ActionListener() {
+			JButton btnRemove = new JButton("Remove");
+			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					 players.get(currentUserID).removeTeammate(currentTeammate);
 					 displayTeammates();
 				}
 			});
-			btnDelete.setForeground(Color.WHITE);
-			btnDelete.setBackground(Color.BLACK);
-			btnDelete.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-			btnDelete.setBounds(347, 21 + (107 * i), 89, 23);
-			teammatesPanel.add(btnDelete);
+			btnRemove.setForeground(Color.WHITE);
+			btnRemove.setBackground(Color.BLACK);
+			btnRemove.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+			btnRemove.setBounds(347, 21 + (107 * i), 89, 23);
+			teammatesPanel.add(btnRemove);
 			teammatesPanel.setPreferredSize(new Dimension(150, 100 * i));
 		}
 		teammatesPanel.revalidate();
 		teammatesPanel.repaint();
 	}
+	/**
+	 * The displayActivePlayground method loops through all the playground owners and displays all their active playgrounds.
+	 * It adds a Deactivate button next to each playground which when clicked sets the playground's status to false.
+	 * And it adds a Delete button which deletes that playground from the playground owner's list.
+	 */
 	public void displayActivePlaygrounds() {
 		displayActivePlaygroundsPanel.removeAll();
 		int playgroundNum = 0;
@@ -725,6 +733,11 @@ public class system {
 		displayActivePlaygroundsPanel.revalidate();
 		displayActivePlaygroundsPanel.repaint();
 	}
+	/**
+	 * The displayInactivePlayground method loops through all the playground owners and displays all their inactive playgrounds.
+	 * It adds a Activate button next to each playground which when clicked sets the playground's status to true.
+	 * And it adds a Delete button which deletes that playground from the playground owner's list.
+	 */
 	public void displayInactivePlaygrounds() {
 		displayInactivePlaygroundsPanel.removeAll();
 		int playgroundNum = 0;
@@ -773,14 +786,14 @@ public class system {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Go Football");
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 737, 708);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 731, 680);
+		tabbedPane.setBounds(0, -26, 731, 706);
 		frame.getContentPane().add(tabbedPane);
 		
 		JPanel startupPanel= new JPanel();
@@ -807,8 +820,8 @@ public class system {
 				tabbedPane.setSelectedComponent(loginPanel); // Go to login tab
 			}
 		});
-		btnLogIn.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		btnLogIn.setBounds(289, 302, 144, 52);
+		btnLogIn.setFont(new Font("Showcard Gothic", Font.PLAIN, 26));
+		btnLogIn.setBounds(270, 297, 192, 65);
 		startupPanel.add(btnLogIn);
 		
 		JButton btnLogIn_1 = new JButton("Sign up");
@@ -817,14 +830,14 @@ public class system {
 				tabbedPane.setSelectedComponent(signupPanel); // Go to Sign up tab
 			}
 		});
-		btnLogIn_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		btnLogIn_1.setBounds(291, 409, 144, 52);
+		btnLogIn_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 26));
+		btnLogIn_1.setBounds(270, 408, 192, 70);
 		startupPanel.add(btnLogIn_1);
 		
 		JLabel lblWelcomeToGo = new JLabel("Welcome to Go Football!");
-		lblWelcomeToGo.setFont(new Font("Showcard Gothic", Font.BOLD | Font.ITALIC, 35));
+		lblWelcomeToGo.setFont(new Font("Showcard Gothic", Font.BOLD | Font.ITALIC, 37));
 		lblWelcomeToGo.setForeground(new Color(255, 255, 255));
-		lblWelcomeToGo.setBounds(96, 120, 568, 95);
+		lblWelcomeToGo.setBounds(86, 130, 568, 95);
 		startupPanel.add(lblWelcomeToGo);
 		tabbedPane.addTab("login", null, loginPanel, null);
 		loginPanel.setLayout(null);
@@ -1136,8 +1149,233 @@ public class system {
 		btnOLogOut.setBounds(10, 528, 205, 49);
 		menuOwnerPanel.add(btnOLogOut);
 		
+		homeOwnerPanel = new JPanel();
+		homeOwnerPanel.setBounds(227, 0, 499, 675);
+		homeOwnerPanel.setBackground(new Color(51, 153, 102));
+		OwnerPanel.add(homeOwnerPanel);
+		homeOwnerPanel.setLayout(null);
+		
+		JLabel lblHome = new JLabel("Home");
+		lblHome.setForeground(Color.WHITE);
+		lblHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 32));
+		lblHome.setBounds(198, 57, 109, 50);
+		homeOwnerPanel.add(lblHome);
+		
+		JLabel lblYourPlaygrounds = new JLabel("Your Playgrounds:");
+		lblYourPlaygrounds.setForeground(Color.WHITE);
+		lblYourPlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 22));
+		lblYourPlaygrounds.setBounds(25, 157, 259, 50);
+		homeOwnerPanel.add(lblYourPlaygrounds);
+		
+
+		playgroundsOwnerPanel = new JPanel();
+		playgroundsOwnerPanel.setBackground(new Color(51, 153, 102));
+		playgroundsOwnerPanel.setLayout(null);
+		JScrollPane scrollPane_1 = new JScrollPane(playgroundsOwnerPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setBounds(47, 207, 426, 407);
+		homeOwnerPanel.add(scrollPane_1);
+		
+		profileOwnerPanel = new JPanel();
+		profileOwnerPanel.setBounds(227, 0, 499, 675);
+		profileOwnerPanel.setBackground(new Color(51, 153, 102));
+		OwnerPanel.add(profileOwnerPanel);
+		profileOwnerPanel.setLayout(null);
+		
+		JLabel lblProfile = new JLabel("Profile");
+		lblProfile.setForeground(Color.WHITE);
+		lblProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
+		lblProfile.setBounds(173, 61, 139, 50);
+		profileOwnerPanel.add(lblProfile);
+		
+		JLabel nameProfileLabel = new JLabel("Name :");
+		nameProfileLabel.setForeground(Color.WHITE);
+		nameProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		nameProfileLabel.setBounds(34, 151, 75, 33);
+		profileOwnerPanel.add(nameProfileLabel);
+		
+		JLabel emailProfileLabel = new JLabel("Email:");
+		emailProfileLabel.setForeground(Color.WHITE);
+		emailProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		emailProfileLabel.setBounds(34, 203, 75, 33);
+		profileOwnerPanel.add(emailProfileLabel);
+		
+		JLabel numberProfileLabel = new JLabel("Phone Number:");
+		numberProfileLabel.setForeground(Color.WHITE);
+		numberProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		numberProfileLabel.setBounds(34, 267, 162, 33);
+		profileOwnerPanel.add(numberProfileLabel);
+		
+		JLabel locationProfileLabel = new JLabel("Location:");
+		locationProfileLabel.setForeground(Color.WHITE);
+		locationProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		locationProfileLabel.setBounds(34, 337, 106, 33);
+		profileOwnerPanel.add(locationProfileLabel);
+		
+		JLabel walletProfileLabel = new JLabel("Wallet:");
+		walletProfileLabel.setForeground(Color.WHITE);
+		walletProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		walletProfileLabel.setBounds(34, 395, 86, 33);
+		profileOwnerPanel.add(walletProfileLabel);
+		
+		nameProfileFieldO = new JTextField();
+		nameProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		nameProfileFieldO.setBounds(119, 158, 215, 20);
+		nameProfileFieldO.setBackground(new Color(51, 153, 102));
+		nameProfileFieldO.setEditable(false);
+		profileOwnerPanel.add(nameProfileFieldO);
+		nameProfileFieldO.setColumns(10);
+		
+		emailProfileFieldO = new JTextField();
+		emailProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		emailProfileFieldO.setColumns(10);
+		emailProfileFieldO.setBounds(119, 210, 215, 20);
+		emailProfileFieldO.setBackground(new Color(51, 153, 102));
+		emailProfileFieldO.setEditable(false);
+		profileOwnerPanel.add(emailProfileFieldO);
+		
+		locationProfileFieldO = new JTextField();
+		locationProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		locationProfileFieldO.setColumns(10);
+		locationProfileFieldO.setBounds(147, 345, 205, 20);
+		locationProfileFieldO.setBackground(new Color(51, 153, 102));
+		locationProfileFieldO.setEditable(false);
+		profileOwnerPanel.add(locationProfileFieldO);
+		
+		walletProfileFieldO = new JTextField();
+		walletProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		walletProfileFieldO.setColumns(10);
+		walletProfileFieldO.setBounds(130, 403, 106, 20);
+		walletProfileFieldO.setBackground(new Color(51, 153, 102));
+		walletProfileFieldO.setEditable(false);
+		profileOwnerPanel.add(walletProfileFieldO);
+		
+		numberProfileFieldO = new JTextField();
+		numberProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		numberProfileFieldO.setColumns(10);
+		numberProfileFieldO.setBounds(223, 274, 148, 20);
+		numberProfileFieldO.setBackground(new Color(51, 153, 102));
+		numberProfileFieldO.setEditable(false);
+		profileOwnerPanel.add(numberProfileFieldO);
+		
+		JButton editNameBtnO = new JButton("Edit");
+		editNameBtnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nameProfileFieldO.setEditable(true);
+				nameProfileFieldO.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editNameBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editNameBtnO.setBounds(392, 157, 70, 23);
+		profileOwnerPanel.add(editNameBtnO);
+		
+		JButton editEmailBtnO = new JButton("Edit");
+		editEmailBtnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				emailProfileFieldO.setEditable(true);
+				emailProfileFieldO.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editEmailBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editEmailBtnO.setBounds(392, 209, 70, 23);
+		profileOwnerPanel.add(editEmailBtnO);
+		
+		JButton editNumberBtnO = new JButton("Edit");
+		editNumberBtnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberProfileFieldO.setEditable(true);
+				numberProfileFieldO.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editNumberBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editNumberBtnO.setBounds(392, 273, 70, 23);
+		profileOwnerPanel.add(editNumberBtnO);
+		
+		JButton editLocationBtnO = new JButton("Edit");
+		editLocationBtnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				locationProfileFieldO.setEditable(true);
+				locationProfileFieldO.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editLocationBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editLocationBtnO.setBounds(392, 343, 70, 23);
+		profileOwnerPanel.add(editLocationBtnO);
+		
+		btnDepositO = new JButton("Deposit");
+		btnDepositO.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDepositO.setBounds(354, 454, 124, 23);
+		profileOwnerPanel.add(btnDepositO);
+		
+		btnWithdrawO = new JButton("Withdraw");
+		btnWithdrawO.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnWithdrawO.setBounds(354, 500, 124, 23);
+		profileOwnerPanel.add(btnWithdrawO);
+		
+		btnUpdateO = new JButton("Update");
+		btnUpdateO.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnUpdateO.setBounds(176, 596, 121, 33);
+		profileOwnerPanel.add(btnUpdateO);
+		
+		errorMsgProfile = new JLabel("", SwingConstants.CENTER);
+		errorMsgProfile.setForeground(new Color(255, 102, 102));
+		errorMsgProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		errorMsgProfile.setBounds(48, 543, 407, 30);
+		profileOwnerPanel.add(errorMsgProfile);
+		
+		depositField = new JTextField();
+		depositField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					double i = Double.parseDouble(depositField.getText()+e.getKeyChar());
+					invalidLabel_6.setText("");
+				} catch(NumberFormatException e1) {
+					invalidLabel_6.setText("Invalid Number");
+				}
+			}
+		});
+		depositField.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		depositField.setBounds(204, 455, 130, 22);
+		profileOwnerPanel.add(depositField);
+		depositField.setColumns(10);
+		
+		withdrawField = new JTextField();
+		withdrawField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					double i = Double.parseDouble(withdrawField.getText()+e.getKeyChar());
+					invalidLabel_7.setText("");
+				} catch(NumberFormatException e1) {
+					invalidLabel_7.setText("Invalid Number");
+				}
+			}
+		});
+		withdrawField.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		withdrawField.setColumns(10);
+		withdrawField.setBounds(204, 500, 130, 23);
+		profileOwnerPanel.add(withdrawField);
+		
+		invalidLabel_6 = new JLabel("");
+		invalidLabel_6.setForeground(new Color(255, 102, 102));
+		invalidLabel_6.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		invalidLabel_6.setBounds(48, 458, 123, 14);
+		profileOwnerPanel.add(invalidLabel_6);
+		
+		invalidLabel_7 = new JLabel("");
+		invalidLabel_7.setForeground(new Color(255, 102, 102));
+		invalidLabel_7.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		invalidLabel_7.setBounds(48, 505, 123, 14);
+		profileOwnerPanel.add(invalidLabel_7);
+		
+		JLabel walletProfileLabel_1_1_1 = new JLabel("pounds");
+		walletProfileLabel_1_1_1.setForeground(Color.WHITE);
+		walletProfileLabel_1_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
+		walletProfileLabel_1_1_1.setBounds(246, 406, 86, 20);
+		profileOwnerPanel.add(walletProfileLabel_1_1_1);
+		
 		addPlaygroundOwnerPanel = new JPanel();
-		addPlaygroundOwnerPanel.setBounds(227, 0, 499, 652);
+		addPlaygroundOwnerPanel.setBounds(227, 0, 499, 675);
 		OwnerPanel.add(addPlaygroundOwnerPanel);
 		addPlaygroundOwnerPanel.setLayout(null);
 		addPlaygroundOwnerPanel.setBackground(new Color(51, 153, 102));
@@ -1418,7 +1656,7 @@ public class system {
 		addPlaygroundOwnerPanel.add(lblPounds_1);
 		
 		viewBookingsOwnerPanel = new JPanel();
-		viewBookingsOwnerPanel.setBounds(227, 0, 499, 652);
+		viewBookingsOwnerPanel.setBounds(227, 0, 499, 675);
 		OwnerPanel.add(viewBookingsOwnerPanel);
 		viewBookingsOwnerPanel.setLayout(null);
 		viewBookingsOwnerPanel.setBackground(new Color(51, 153, 102));
@@ -1442,231 +1680,6 @@ public class system {
 		bookedSlotsPanelO.add(lblSlotDate_1);
 		scrollPane_2.setBounds(25, 166, 449, 475);
 		viewBookingsOwnerPanel.add(scrollPane_2);
-		
-		profileOwnerPanel = new JPanel();
-		profileOwnerPanel.setBounds(227, 0, 499, 652);
-		profileOwnerPanel.setBackground(new Color(51, 153, 102));
-		OwnerPanel.add(profileOwnerPanel);
-		profileOwnerPanel.setLayout(null);
-		
-		JLabel lblProfile = new JLabel("Profile");
-		lblProfile.setForeground(Color.WHITE);
-		lblProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
-		lblProfile.setBounds(173, 61, 139, 50);
-		profileOwnerPanel.add(lblProfile);
-		
-		JLabel nameProfileLabel = new JLabel("Name :");
-		nameProfileLabel.setForeground(Color.WHITE);
-		nameProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		nameProfileLabel.setBounds(34, 151, 75, 33);
-		profileOwnerPanel.add(nameProfileLabel);
-		
-		JLabel emailProfileLabel = new JLabel("Email:");
-		emailProfileLabel.setForeground(Color.WHITE);
-		emailProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		emailProfileLabel.setBounds(34, 203, 75, 33);
-		profileOwnerPanel.add(emailProfileLabel);
-		
-		JLabel numberProfileLabel = new JLabel("Phone Number:");
-		numberProfileLabel.setForeground(Color.WHITE);
-		numberProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		numberProfileLabel.setBounds(34, 267, 162, 33);
-		profileOwnerPanel.add(numberProfileLabel);
-		
-		JLabel locationProfileLabel = new JLabel("Location:");
-		locationProfileLabel.setForeground(Color.WHITE);
-		locationProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		locationProfileLabel.setBounds(34, 337, 106, 33);
-		profileOwnerPanel.add(locationProfileLabel);
-		
-		JLabel walletProfileLabel = new JLabel("Wallet:");
-		walletProfileLabel.setForeground(Color.WHITE);
-		walletProfileLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		walletProfileLabel.setBounds(34, 395, 86, 33);
-		profileOwnerPanel.add(walletProfileLabel);
-		
-		nameProfileFieldO = new JTextField();
-		nameProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		nameProfileFieldO.setBounds(119, 158, 215, 20);
-		nameProfileFieldO.setBackground(new Color(51, 153, 102));
-		nameProfileFieldO.setEditable(false);
-		profileOwnerPanel.add(nameProfileFieldO);
-		nameProfileFieldO.setColumns(10);
-		
-		emailProfileFieldO = new JTextField();
-		emailProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		emailProfileFieldO.setColumns(10);
-		emailProfileFieldO.setBounds(119, 210, 215, 20);
-		emailProfileFieldO.setBackground(new Color(51, 153, 102));
-		emailProfileFieldO.setEditable(false);
-		profileOwnerPanel.add(emailProfileFieldO);
-		
-		locationProfileFieldO = new JTextField();
-		locationProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		locationProfileFieldO.setColumns(10);
-		locationProfileFieldO.setBounds(147, 345, 205, 20);
-		locationProfileFieldO.setBackground(new Color(51, 153, 102));
-		locationProfileFieldO.setEditable(false);
-		profileOwnerPanel.add(locationProfileFieldO);
-		
-		walletProfileFieldO = new JTextField();
-		walletProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		walletProfileFieldO.setColumns(10);
-		walletProfileFieldO.setBounds(130, 403, 106, 20);
-		walletProfileFieldO.setBackground(new Color(51, 153, 102));
-		walletProfileFieldO.setEditable(false);
-		profileOwnerPanel.add(walletProfileFieldO);
-		
-		numberProfileFieldO = new JTextField();
-		numberProfileFieldO.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		numberProfileFieldO.setColumns(10);
-		numberProfileFieldO.setBounds(223, 274, 148, 20);
-		numberProfileFieldO.setBackground(new Color(51, 153, 102));
-		numberProfileFieldO.setEditable(false);
-		profileOwnerPanel.add(numberProfileFieldO);
-		
-		JButton editNameBtnO = new JButton("Edit");
-		editNameBtnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				nameProfileFieldO.setEditable(true);
-				nameProfileFieldO.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editNameBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editNameBtnO.setBounds(392, 157, 70, 23);
-		profileOwnerPanel.add(editNameBtnO);
-		
-		JButton editEmailBtnO = new JButton("Edit");
-		editEmailBtnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				emailProfileFieldO.setEditable(true);
-				emailProfileFieldO.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editEmailBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editEmailBtnO.setBounds(392, 209, 70, 23);
-		profileOwnerPanel.add(editEmailBtnO);
-		
-		JButton editNumberBtnO = new JButton("Edit");
-		editNumberBtnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				numberProfileFieldO.setEditable(true);
-				numberProfileFieldO.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editNumberBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editNumberBtnO.setBounds(392, 273, 70, 23);
-		profileOwnerPanel.add(editNumberBtnO);
-		
-		JButton editLocationBtnO = new JButton("Edit");
-		editLocationBtnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				locationProfileFieldO.setEditable(true);
-				locationProfileFieldO.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editLocationBtnO.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editLocationBtnO.setBounds(392, 343, 70, 23);
-		profileOwnerPanel.add(editLocationBtnO);
-		
-		btnDepositO = new JButton("Deposit");
-		btnDepositO.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnDepositO.setBounds(354, 454, 124, 23);
-		profileOwnerPanel.add(btnDepositO);
-		
-		btnWithdrawO = new JButton("Withdraw");
-		btnWithdrawO.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnWithdrawO.setBounds(354, 500, 124, 23);
-		profileOwnerPanel.add(btnWithdrawO);
-		
-		btnUpdateO = new JButton("Update");
-		btnUpdateO.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		btnUpdateO.setBounds(176, 596, 121, 33);
-		profileOwnerPanel.add(btnUpdateO);
-		
-		errorMsgProfile = new JLabel("", SwingConstants.CENTER);
-		errorMsgProfile.setForeground(new Color(255, 102, 102));
-		errorMsgProfile.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		errorMsgProfile.setBounds(48, 543, 407, 30);
-		profileOwnerPanel.add(errorMsgProfile);
-		
-		depositField = new JTextField();
-		depositField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					double i = Double.parseDouble(depositField.getText()+e.getKeyChar());
-					invalidLabel_6.setText("");
-				} catch(NumberFormatException e1) {
-					invalidLabel_6.setText("Invalid Number");
-				}
-			}
-		});
-		depositField.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		depositField.setBounds(204, 455, 130, 22);
-		profileOwnerPanel.add(depositField);
-		depositField.setColumns(10);
-		
-		withdrawField = new JTextField();
-		withdrawField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					double i = Double.parseDouble(withdrawField.getText()+e.getKeyChar());
-					invalidLabel_7.setText("");
-				} catch(NumberFormatException e1) {
-					invalidLabel_7.setText("Invalid Number");
-				}
-			}
-		});
-		withdrawField.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		withdrawField.setColumns(10);
-		withdrawField.setBounds(204, 500, 130, 23);
-		profileOwnerPanel.add(withdrawField);
-		
-		invalidLabel_6 = new JLabel("");
-		invalidLabel_6.setForeground(new Color(255, 102, 102));
-		invalidLabel_6.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_6.setBounds(48, 458, 123, 14);
-		profileOwnerPanel.add(invalidLabel_6);
-		
-		invalidLabel_7 = new JLabel("");
-		invalidLabel_7.setForeground(new Color(255, 102, 102));
-		invalidLabel_7.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_7.setBounds(48, 505, 123, 14);
-		profileOwnerPanel.add(invalidLabel_7);
-		
-		JLabel walletProfileLabel_1_1_1 = new JLabel("pounds");
-		walletProfileLabel_1_1_1.setForeground(Color.WHITE);
-		walletProfileLabel_1_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
-		walletProfileLabel_1_1_1.setBounds(246, 406, 86, 20);
-		profileOwnerPanel.add(walletProfileLabel_1_1_1);
-		
-		homeOwnerPanel = new JPanel();
-		homeOwnerPanel.setBounds(227, 0, 499, 652);
-		homeOwnerPanel.setBackground(new Color(51, 153, 102));
-		OwnerPanel.add(homeOwnerPanel);
-		homeOwnerPanel.setLayout(null);
-		
-		JLabel lblHome = new JLabel("Home");
-		lblHome.setForeground(Color.WHITE);
-		lblHome.setFont(new Font("Showcard Gothic", Font.PLAIN, 32));
-		lblHome.setBounds(198, 57, 109, 50);
-		homeOwnerPanel.add(lblHome);
-		
-		JLabel lblYourPlaygrounds = new JLabel("Your Playgrounds:");
-		lblYourPlaygrounds.setForeground(Color.WHITE);
-		lblYourPlaygrounds.setFont(new Font("Showcard Gothic", Font.PLAIN, 22));
-		lblYourPlaygrounds.setBounds(25, 157, 259, 50);
-		homeOwnerPanel.add(lblYourPlaygrounds);
-		
-
-		playgroundsOwnerPanel = new JPanel();
-		playgroundsOwnerPanel.setBackground(new Color(51, 153, 102));
-		playgroundsOwnerPanel.setLayout(null);
-		JScrollPane scrollPane_1 = new JScrollPane(playgroundsOwnerPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(47, 207, 426, 407);
-		homeOwnerPanel.add(scrollPane_1);
 		
 		tabbedPane.addTab("Player", null, playerPanel, null);
 		playerPanel.setLayout(null);
@@ -1771,188 +1784,189 @@ public class system {
 		btnPLogOut.setBounds(10, 528, 205, 49);
 		menuPlayerPanel.add(btnPLogOut);
 		
-		bookedSlotsPlayerPanel = new JPanel();
-		bookedSlotsPlayerPanel.setBounds(227, 0, 499, 652);
-		playerPanel.add(bookedSlotsPlayerPanel);
-		bookedSlotsPlayerPanel.setLayout(null);
-		bookedSlotsPlayerPanel.setForeground(Color.BLACK);
-		bookedSlotsPlayerPanel.setBackground(new Color(51, 153, 102));
+		profilePlayerPanel = new JPanel();
+		profilePlayerPanel.setBounds(227, 0, 499, 675);
+		playerPanel.add(profilePlayerPanel);
+		profilePlayerPanel.setLayout(null);
+		profilePlayerPanel.setForeground(Color.BLACK);
+		profilePlayerPanel.setBackground(new Color(51, 153, 102));
 		
-		JLabel lblBookedSlots = new JLabel("Booked Slots");
-		lblBookedSlots.setForeground(Color.WHITE);
-		lblBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
-		lblBookedSlots.setBounds(131, 71, 232, 50);
-		bookedSlotsPlayerPanel.add(lblBookedSlots);
+		JLabel lblProfile_1 = new JLabel("Profile");
+		lblProfile_1.setForeground(Color.WHITE);
+		lblProfile_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
+		lblProfile_1.setBounds(171, 80, 137, 50);
+		profilePlayerPanel.add(lblProfile_1);
 		
-		bookedSlotsPanelP = new JPanel();
-		bookedSlotsPanelP.setBackground(new Color(51, 153, 102));
-		bookedSlotsPanelP.setLayout(null);
+		JLabel nameProfileLabel_1 = new JLabel("Name :");
+		nameProfileLabel_1.setForeground(Color.WHITE);
+		nameProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		nameProfileLabel_1.setBounds(29, 163, 75, 33);
+		profilePlayerPanel.add(nameProfileLabel_1);
 		
-		JScrollPane scrollPane_4 = new JScrollPane(bookedSlotsPanelP,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		nameProfileFieldP = new JTextField();
+		nameProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		nameProfileFieldP.setEditable(false);
+		nameProfileFieldP.setColumns(10);
+		nameProfileFieldP.setBackground(new Color(51, 153, 102));
+		nameProfileFieldP.setBounds(114, 170, 215, 20);
+		profilePlayerPanel.add(nameProfileFieldP);
 		
-		JLabel lblSlotDate = new JLabel("<html>Playground #1 Cairo<br>Slot #1    date: 22-22-2002   from: 12:20 am   to: 23:23 pm</html>");
-		lblSlotDate.setForeground(new Color(255, 204, 0));
-		lblSlotDate.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
-		lblSlotDate.setBounds(10, 11, 416, 45);
-		bookedSlotsPanelP.add(lblSlotDate);
-		
-		JButton btnCancelBooking = new JButton("Cancel Booking");
-		btnCancelBooking.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		btnCancelBooking.setBounds(51, 67, 151, 23);
-		bookedSlotsPanelP.add(btnCancelBooking);
-		
-		JButton btnInviteTeam = new JButton("Invite Team");
-		btnInviteTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		btnInviteTeam.setBounds(235, 67, 151, 23);
-		bookedSlotsPanelP.add(btnInviteTeam);
-		
-		JLabel lblSlotDate_2 = new JLabel("Slot #2    date: 22-22-2002   from: 12:20 am   to: 23:23 pm");
-		lblSlotDate_2.setForeground(new Color(255, 204, 0));
-		lblSlotDate_2.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
-		lblSlotDate_2.setBounds(10, 121, 416, 14);
-		bookedSlotsPanelP.add(lblSlotDate_2);
-		
-		JButton btnCancelBooking_1 = new JButton("Cancel Booking");
-		btnCancelBooking_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		btnCancelBooking_1.setBounds(51, 146, 151, 23);
-		bookedSlotsPanelP.add(btnCancelBooking_1);
-		
-		JButton btnInviteTeam_1 = new JButton("Invite Team");
-		btnInviteTeam_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		btnInviteTeam_1.setBounds(235, 146, 151, 23);
-		bookedSlotsPanelP.add(btnInviteTeam_1);
-		scrollPane_4.setBounds(33, 161, 438, 442);
-		bookedSlotsPlayerPanel.add(scrollPane_4);
-		
-		errorMsgBookedSlots = new JLabel("", SwingConstants.CENTER);
-		errorMsgBookedSlots.setForeground(new Color(255, 102, 102));
-		errorMsgBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 18));
-		errorMsgBookedSlots.setBounds(43, 614, 407, 23);
-		bookedSlotsPlayerPanel.add(errorMsgBookedSlots);
-		
-		teamPlayerPanel = new JPanel();
-		teamPlayerPanel.setLayout(null);
-		teamPlayerPanel.setForeground(Color.BLACK);
-		teamPlayerPanel.setBackground(new Color(51, 153, 102));
-		teamPlayerPanel.setBounds(227, 0, 499, 652);
-		playerPanel.add(teamPlayerPanel);
-		
-		btnAddTeammate = new JButton("Add Teammate");
-		btnAddTeammate.addActionListener(new ActionListener() {
+		JButton editNameBtnO_1 = new JButton("Edit");
+		editNameBtnO_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newTeammatePanel.setVisible(true);
-				btnAddTeammate.setVisible(false);
-				teamPlayerPanel.repaint();
+				nameProfileFieldP.setEditable(true);
+				nameProfileFieldP.setBackground(new Color(255, 255, 255));
 			}
 		});
+		editNameBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editNameBtnO_1.setBounds(387, 169, 70, 23);
+		profilePlayerPanel.add(editNameBtnO_1);
 		
-		newTeammatePanel = new JPanel();
-		newTeammatePanel.setVisible(false);
-		newTeammatePanel.setBackground(new Color(153, 204, 153));
-		newTeammatePanel.setBounds(35, 153, 434, 365);
-		teamPlayerPanel.add(newTeammatePanel);
-		newTeammatePanel.setLayout(null);
-		
-		JLabel lblNewTeammate = new JLabel("New Teammate");
-		lblNewTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 24));
-		lblNewTeammate.setBounds(128, 33, 199, 51);
-		newTeammatePanel.add(lblNewTeammate);
-		
-		JLabel lblName = new JLabel("Name:");
-		lblName.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		lblName.setBounds(50, 124, 75, 51);
-		newTeammatePanel.add(lblName);
-		
-		JLabel lblEmailNew = new JLabel("Email:");
-		lblEmailNew.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		lblEmailNew.setBounds(50, 186, 75, 43);
-		newTeammatePanel.add(lblEmailNew);
-		
-		JButton btnAdd = new JButton("Add");
-		btnAdd.addActionListener(new ActionListener() {
+		JButton editEmailBtnO_1 = new JButton("Edit");
+		editEmailBtnO_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (nameTeamField.getText().equals("")) {
-					errorMsgNewTeammate.setText("Enter the Name");
-				} else if (emailTeamField.getText().equals("")) {
-					errorMsgNewTeammate.setText("Enter the Email");
-				} else {
-					errorMsgNewTeammate.setText("");
-					players.get(currentUserID).addTeammate(nameTeamField.getText(), emailTeamField.getText());
-					nameTeamField.setText("");
-					emailTeamField.setText("");
-					displayTeammates();
-					newTeammatePanel.setVisible(false);
-					teamPlayerPanel.setVisible(true);
-					btnAddTeammate.setVisible(true);
-				}
+				emailProfileFieldP.setEditable(true);
+				emailProfileFieldP.setBackground(new Color(255, 255, 255));
 			}
 		});
-		btnAdd.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		btnAdd.setBounds(163, 289, 114, 34);
-		newTeammatePanel.add(btnAdd);
+		editEmailBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editEmailBtnO_1.setBounds(387, 221, 70, 23);
+		profilePlayerPanel.add(editEmailBtnO_1);
 		
-		nameTeamField = new JTextField();
-		nameTeamField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		nameTeamField.setBounds(135, 135, 226, 26);
-		newTeammatePanel.add(nameTeamField);
-		nameTeamField.setColumns(10);
+		emailProfileFieldP = new JTextField();
+		emailProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		emailProfileFieldP.setEditable(false);
+		emailProfileFieldP.setColumns(10);
+		emailProfileFieldP.setBackground(new Color(51, 153, 102));
+		emailProfileFieldP.setBounds(114, 222, 215, 20);
+		profilePlayerPanel.add(emailProfileFieldP);
 		
-		emailTeamField = new JTextField();
-		emailTeamField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		emailTeamField.setColumns(10);
-		emailTeamField.setBounds(135, 196, 226, 26);
-		newTeammatePanel.add(emailTeamField);
+		JLabel emailProfileLabel_1 = new JLabel("Email:");
+		emailProfileLabel_1.setForeground(Color.WHITE);
+		emailProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		emailProfileLabel_1.setBounds(29, 215, 75, 33);
+		profilePlayerPanel.add(emailProfileLabel_1);
 		
-		errorMsgNewTeammate = new JLabel("", SwingConstants.CENTER);
-		errorMsgNewTeammate.setForeground(new Color(255, 102, 102));
-		errorMsgNewTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		errorMsgNewTeammate.setBounds(10, 240, 414, 23);
-		newTeammatePanel.add(errorMsgNewTeammate);
+		JLabel numberProfileLabel_1 = new JLabel("Phone Number:");
+		numberProfileLabel_1.setForeground(Color.WHITE);
+		numberProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		numberProfileLabel_1.setBounds(29, 279, 162, 33);
+		profilePlayerPanel.add(numberProfileLabel_1);
 		
-		JLabel lbTeam = new JLabel("Team");
-		lbTeam.setForeground(Color.WHITE);
-		lbTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 34));
-		lbTeam.setBounds(194, 71, 108, 50);
-		teamPlayerPanel.add(lbTeam);
-		btnAddTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		btnAddTeammate.setBounds(148, 572, 200, 34);
-		teamPlayerPanel.add(btnAddTeammate);
+		numberProfileFieldP = new JTextField();
+		numberProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		numberProfileFieldP.setEditable(false);
+		numberProfileFieldP.setColumns(10);
+		numberProfileFieldP.setBackground(new Color(51, 153, 102));
+		numberProfileFieldP.setBounds(218, 286, 148, 20);
+		profilePlayerPanel.add(numberProfileFieldP);
 		
-		teammatesPanel = new JPanel();
-		teammatesPanel.setBackground(new Color(51, 153, 102));
-		teammatesPanel.setLayout(null);
+		JButton editNumberBtnO_1 = new JButton("Edit");
+		editNumberBtnO_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberProfileFieldP.setEditable(true);
+				numberProfileFieldP.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editNumberBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editNumberBtnO_1.setBounds(387, 285, 70, 23);
+		profilePlayerPanel.add(editNumberBtnO_1);
 		
-		JScrollPane scrollPane_5 = new JScrollPane(teammatesPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JButton editLocationBtnO_1 = new JButton("Edit");
+		editLocationBtnO_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				locationProfileFieldP.setEditable(true);
+				locationProfileFieldP.setBackground(new Color(255, 255, 255));
+			}
+		});
+		editLocationBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		editLocationBtnO_1.setBounds(387, 355, 70, 23);
+		profilePlayerPanel.add(editLocationBtnO_1);
 		
-		JLabel lblTeammate = new JLabel("<html><span style=\"color:black;\">Teammate #1 </span><br>&nbsp Name: Marwa <br>&nbsp Email: farabi.marwa@gmail.com</html>");
-		lblTeammate.setForeground(new Color(255, 204, 0));
-		lblTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblTeammate.setBounds(10, 11, 426, 75);
-		teammatesPanel.add(lblTeammate);
+		locationProfileFieldP = new JTextField();
+		locationProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		locationProfileFieldP.setEditable(false);
+		locationProfileFieldP.setColumns(10);
+		locationProfileFieldP.setBackground(new Color(51, 153, 102));
+		locationProfileFieldP.setBounds(142, 357, 205, 20);
+		profilePlayerPanel.add(locationProfileFieldP);
 		
-		JLabel lblTeammate_1 = new JLabel("<html><span style=\"color:black;\">Teammate #1 </span><br>&nbsp Name: Marwa <br>&nbsp Email: farabi.marwa@gmail.com</html>");
-		lblTeammate_1.setForeground(new Color(255, 204, 0));
-		lblTeammate_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		lblTeammate_1.setBounds(10, 118, 426, 75);
-		teammatesPanel.add(lblTeammate_1);
+		JLabel locationProfileLabel_1 = new JLabel("Location:");
+		locationProfileLabel_1.setForeground(Color.WHITE);
+		locationProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		locationProfileLabel_1.setBounds(29, 349, 106, 33);
+		profilePlayerPanel.add(locationProfileLabel_1);
 		
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnDelete.setBounds(347, 21, 89, 23);
-		teammatesPanel.add(btnDelete);
+		JLabel walletProfileLabel_1 = new JLabel("Wallet:");
+		walletProfileLabel_1.setForeground(Color.WHITE);
+		walletProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
+		walletProfileLabel_1.setBounds(29, 407, 86, 33);
+		profilePlayerPanel.add(walletProfileLabel_1);
 		
-		JButton btnDelete_1 = new JButton("Delete");
-		btnDelete_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnDelete_1.setBounds(347, 128, 89, 23);
-		teammatesPanel.add(btnDelete_1);
-		scrollPane_5.setBounds(27, 153, 448, 365);
-		teamPlayerPanel.add(scrollPane_5);
+		walletProfileFieldP = new JTextField();
+		walletProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		walletProfileFieldP.setEditable(false);
+		walletProfileFieldP.setColumns(10);
+		walletProfileFieldP.setBackground(new Color(51, 153, 102));
+		walletProfileFieldP.setBounds(125, 415, 106, 20);
+		profilePlayerPanel.add(walletProfileFieldP);
+		
+		depositField2 = new JTextField();
+		depositField2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		depositField2.setColumns(10);
+		depositField2.setBounds(199, 467, 130, 22);
+		profilePlayerPanel.add(depositField2);
+		
+		btnDepositP = new JButton("Deposit");
+		btnDepositP.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDepositP.setBounds(349, 466, 124, 23);
+		profilePlayerPanel.add(btnDepositP);
+		
+		btnWithdrawP = new JButton("Withdraw");
+		btnWithdrawP.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnWithdrawP.setBounds(349, 512, 124, 23);
+		profilePlayerPanel.add(btnWithdrawP);
+		
+		withdrawField2 = new JTextField();
+		withdrawField2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		withdrawField2.setColumns(10);
+		withdrawField2.setBounds(199, 512, 130, 23);
+		profilePlayerPanel.add(withdrawField2);
+		
+		btnUpdateP = new JButton("Update");
+		btnUpdateP.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnUpdateP.setBounds(171, 608, 121, 33);
+		profilePlayerPanel.add(btnUpdateP);
+		
+		errorMsgProfile_1 = new JLabel("", SwingConstants.CENTER);
+		errorMsgProfile_1.setForeground(new Color(255, 102, 102));
+		errorMsgProfile_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		errorMsgProfile_1.setBounds(50, 566, 407, 30);
+		profilePlayerPanel.add(errorMsgProfile_1);
+		
+		invalidLabel_9 = new JLabel("");
+		invalidLabel_9.setForeground(new Color(255, 102, 102));
+		invalidLabel_9.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		invalidLabel_9.setBounds(33, 521, 123, 14);
+		profilePlayerPanel.add(invalidLabel_9);
+		
+		invalidLabel_8 = new JLabel("");
+		invalidLabel_8.setForeground(new Color(255, 102, 102));
+		invalidLabel_8.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		invalidLabel_8.setBounds(33, 474, 123, 14);
+		profilePlayerPanel.add(invalidLabel_8);
+		
+		JLabel walletProfileLabel_1_1 = new JLabel("pounds");
+		walletProfileLabel_1_1.setForeground(Color.WHITE);
+		walletProfileLabel_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
+		walletProfileLabel_1_1.setBounds(243, 414, 86, 20);
+		profilePlayerPanel.add(walletProfileLabel_1_1);
 		
 		homePlayerPanel = new JPanel();
 		homePlayerPanel.setForeground(Color.BLACK);
 		homePlayerPanel.setLayout(null);
 		homePlayerPanel.setBackground(new Color(51, 153, 102));
-		homePlayerPanel.setBounds(227, 0, 499, 652);
+		homePlayerPanel.setBounds(227, 0, 499, 675);
 		playerPanel.add(homePlayerPanel);
 		
 		infoPanel = new JPanel();
@@ -2190,183 +2204,182 @@ public class system {
 		errorMsgMoney.setForeground(new Color(255, 102, 102));
 		errorMsgMoney.setFont(new Font("Showcard Gothic", Font.PLAIN, 18));
 		
-		profilePlayerPanel = new JPanel();
-		profilePlayerPanel.setBounds(227, 0, 499, 652);
-		playerPanel.add(profilePlayerPanel);
-		profilePlayerPanel.setLayout(null);
-		profilePlayerPanel.setForeground(Color.BLACK);
-		profilePlayerPanel.setBackground(new Color(51, 153, 102));
+		teamPlayerPanel = new JPanel();
+		teamPlayerPanel.setLayout(null);
+		teamPlayerPanel.setForeground(Color.BLACK);
+		teamPlayerPanel.setBackground(new Color(51, 153, 102));
+		teamPlayerPanel.setBounds(227, 0, 499, 675);
+		playerPanel.add(teamPlayerPanel);
 		
-		JLabel lblProfile_1 = new JLabel("Profile");
-		lblProfile_1.setForeground(Color.WHITE);
-		lblProfile_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
-		lblProfile_1.setBounds(171, 80, 137, 50);
-		profilePlayerPanel.add(lblProfile_1);
-		
-		JLabel nameProfileLabel_1 = new JLabel("Name :");
-		nameProfileLabel_1.setForeground(Color.WHITE);
-		nameProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		nameProfileLabel_1.setBounds(29, 163, 75, 33);
-		profilePlayerPanel.add(nameProfileLabel_1);
-		
-		nameProfileFieldP = new JTextField();
-		nameProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		nameProfileFieldP.setEditable(false);
-		nameProfileFieldP.setColumns(10);
-		nameProfileFieldP.setBackground(new Color(51, 153, 102));
-		nameProfileFieldP.setBounds(114, 170, 215, 20);
-		profilePlayerPanel.add(nameProfileFieldP);
-		
-		JButton editNameBtnO_1 = new JButton("Edit");
-		editNameBtnO_1.addActionListener(new ActionListener() {
+		btnAddTeammate = new JButton("Add Teammate");
+		btnAddTeammate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nameProfileFieldP.setEditable(true);
-				nameProfileFieldP.setBackground(new Color(255, 255, 255));
+				newTeammatePanel.setVisible(true);
+				btnAddTeammate.setVisible(false);
+				teamPlayerPanel.repaint();
 			}
 		});
-		editNameBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editNameBtnO_1.setBounds(387, 169, 70, 23);
-		profilePlayerPanel.add(editNameBtnO_1);
 		
-		JButton editEmailBtnO_1 = new JButton("Edit");
-		editEmailBtnO_1.addActionListener(new ActionListener() {
+		newTeammatePanel = new JPanel();
+		newTeammatePanel.setVisible(false);
+		newTeammatePanel.setBackground(new Color(153, 204, 153));
+		newTeammatePanel.setBounds(35, 153, 434, 365);
+		teamPlayerPanel.add(newTeammatePanel);
+		newTeammatePanel.setLayout(null);
+		
+		JLabel lblNewTeammate = new JLabel("New Teammate");
+		lblNewTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 24));
+		lblNewTeammate.setBounds(128, 33, 199, 51);
+		newTeammatePanel.add(lblNewTeammate);
+		
+		JLabel lblName = new JLabel("Name:");
+		lblName.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		lblName.setBounds(50, 124, 75, 51);
+		newTeammatePanel.add(lblName);
+		
+		JLabel lblEmailNew = new JLabel("Email:");
+		lblEmailNew.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		lblEmailNew.setBounds(50, 186, 75, 43);
+		newTeammatePanel.add(lblEmailNew);
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				emailProfileFieldP.setEditable(true);
-				emailProfileFieldP.setBackground(new Color(255, 255, 255));
+				if (nameTeamField.getText().equals("")) {
+					errorMsgNewTeammate.setText("Enter the Name");
+				} else if (emailTeamField.getText().equals("")) {
+					errorMsgNewTeammate.setText("Enter the Email");
+				} else {
+					errorMsgNewTeammate.setText("");
+					players.get(currentUserID).addTeammate(nameTeamField.getText(), emailTeamField.getText());
+					nameTeamField.setText("");
+					emailTeamField.setText("");
+					displayTeammates();
+					newTeammatePanel.setVisible(false);
+					teamPlayerPanel.setVisible(true);
+					btnAddTeammate.setVisible(true);
+				}
 			}
 		});
-		editEmailBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editEmailBtnO_1.setBounds(387, 221, 70, 23);
-		profilePlayerPanel.add(editEmailBtnO_1);
+		btnAdd.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnAdd.setBounds(163, 289, 114, 34);
+		newTeammatePanel.add(btnAdd);
 		
-		emailProfileFieldP = new JTextField();
-		emailProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		emailProfileFieldP.setEditable(false);
-		emailProfileFieldP.setColumns(10);
-		emailProfileFieldP.setBackground(new Color(51, 153, 102));
-		emailProfileFieldP.setBounds(114, 222, 215, 20);
-		profilePlayerPanel.add(emailProfileFieldP);
+		nameTeamField = new JTextField();
+		nameTeamField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		nameTeamField.setBounds(135, 135, 226, 26);
+		newTeammatePanel.add(nameTeamField);
+		nameTeamField.setColumns(10);
 		
-		JLabel emailProfileLabel_1 = new JLabel("Email:");
-		emailProfileLabel_1.setForeground(Color.WHITE);
-		emailProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		emailProfileLabel_1.setBounds(29, 215, 75, 33);
-		profilePlayerPanel.add(emailProfileLabel_1);
+		emailTeamField = new JTextField();
+		emailTeamField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		emailTeamField.setColumns(10);
+		emailTeamField.setBounds(135, 196, 226, 26);
+		newTeammatePanel.add(emailTeamField);
 		
-		JLabel numberProfileLabel_1 = new JLabel("Phone Number:");
-		numberProfileLabel_1.setForeground(Color.WHITE);
-		numberProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		numberProfileLabel_1.setBounds(29, 279, 162, 33);
-		profilePlayerPanel.add(numberProfileLabel_1);
+		errorMsgNewTeammate = new JLabel("", SwingConstants.CENTER);
+		errorMsgNewTeammate.setForeground(new Color(255, 102, 102));
+		errorMsgNewTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		errorMsgNewTeammate.setBounds(10, 240, 414, 23);
+		newTeammatePanel.add(errorMsgNewTeammate);
 		
-		numberProfileFieldP = new JTextField();
-		numberProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		numberProfileFieldP.setEditable(false);
-		numberProfileFieldP.setColumns(10);
-		numberProfileFieldP.setBackground(new Color(51, 153, 102));
-		numberProfileFieldP.setBounds(218, 286, 148, 20);
-		profilePlayerPanel.add(numberProfileFieldP);
+		JLabel lbTeam = new JLabel("Team");
+		lbTeam.setForeground(Color.WHITE);
+		lbTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 34));
+		lbTeam.setBounds(194, 71, 108, 50);
+		teamPlayerPanel.add(lbTeam);
+		btnAddTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		btnAddTeammate.setBounds(148, 572, 200, 34);
+		teamPlayerPanel.add(btnAddTeammate);
 		
-		JButton editNumberBtnO_1 = new JButton("Edit");
-		editNumberBtnO_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				numberProfileFieldP.setEditable(true);
-				numberProfileFieldP.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editNumberBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editNumberBtnO_1.setBounds(387, 285, 70, 23);
-		profilePlayerPanel.add(editNumberBtnO_1);
+		teammatesPanel = new JPanel();
+		teammatesPanel.setBackground(new Color(51, 153, 102));
+		teammatesPanel.setLayout(null);
 		
-		JButton editLocationBtnO_1 = new JButton("Edit");
-		editLocationBtnO_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				locationProfileFieldP.setEditable(true);
-				locationProfileFieldP.setBackground(new Color(255, 255, 255));
-			}
-		});
-		editLocationBtnO_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		editLocationBtnO_1.setBounds(387, 355, 70, 23);
-		profilePlayerPanel.add(editLocationBtnO_1);
+		JScrollPane scrollPane_5 = new JScrollPane(teammatesPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		locationProfileFieldP = new JTextField();
-		locationProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		locationProfileFieldP.setEditable(false);
-		locationProfileFieldP.setColumns(10);
-		locationProfileFieldP.setBackground(new Color(51, 153, 102));
-		locationProfileFieldP.setBounds(142, 357, 205, 20);
-		profilePlayerPanel.add(locationProfileFieldP);
+		JLabel lblTeammate = new JLabel("<html><span style=\"color:black;\">Teammate #1 </span><br>&nbsp Name: Marwa <br>&nbsp Email: farabi.marwa@gmail.com</html>");
+		lblTeammate.setForeground(new Color(255, 204, 0));
+		lblTeammate.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		lblTeammate.setBounds(10, 11, 426, 75);
+		teammatesPanel.add(lblTeammate);
 		
-		JLabel locationProfileLabel_1 = new JLabel("Location:");
-		locationProfileLabel_1.setForeground(Color.WHITE);
-		locationProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		locationProfileLabel_1.setBounds(29, 349, 106, 33);
-		profilePlayerPanel.add(locationProfileLabel_1);
+		JLabel lblTeammate_1 = new JLabel("<html><span style=\"color:black;\">Teammate #1 </span><br>&nbsp Name: Marwa <br>&nbsp Email: farabi.marwa@gmail.com</html>");
+		lblTeammate_1.setForeground(new Color(255, 204, 0));
+		lblTeammate_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
+		lblTeammate_1.setBounds(10, 118, 426, 75);
+		teammatesPanel.add(lblTeammate_1);
 		
-		JLabel walletProfileLabel_1 = new JLabel("Wallet:");
-		walletProfileLabel_1.setForeground(Color.WHITE);
-		walletProfileLabel_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
-		walletProfileLabel_1.setBounds(29, 407, 86, 33);
-		profilePlayerPanel.add(walletProfileLabel_1);
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDelete.setBounds(347, 21, 89, 23);
+		teammatesPanel.add(btnDelete);
 		
-		walletProfileFieldP = new JTextField();
-		walletProfileFieldP.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		walletProfileFieldP.setEditable(false);
-		walletProfileFieldP.setColumns(10);
-		walletProfileFieldP.setBackground(new Color(51, 153, 102));
-		walletProfileFieldP.setBounds(125, 415, 106, 20);
-		profilePlayerPanel.add(walletProfileFieldP);
+		JButton btnDelete_1 = new JButton("Delete");
+		btnDelete_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
+		btnDelete_1.setBounds(347, 128, 89, 23);
+		teammatesPanel.add(btnDelete_1);
+		scrollPane_5.setBounds(27, 153, 448, 365);
+		teamPlayerPanel.add(scrollPane_5);
 		
-		depositField2 = new JTextField();
-		depositField2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		depositField2.setColumns(10);
-		depositField2.setBounds(199, 467, 130, 22);
-		profilePlayerPanel.add(depositField2);
+		bookedSlotsPlayerPanel = new JPanel();
+		bookedSlotsPlayerPanel.setBounds(227, 0, 499, 675);
+		playerPanel.add(bookedSlotsPlayerPanel);
+		bookedSlotsPlayerPanel.setLayout(null);
+		bookedSlotsPlayerPanel.setForeground(Color.BLACK);
+		bookedSlotsPlayerPanel.setBackground(new Color(51, 153, 102));
 		
-		btnDepositP = new JButton("Deposit");
-		btnDepositP.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnDepositP.setBounds(349, 466, 124, 23);
-		profilePlayerPanel.add(btnDepositP);
+		JLabel lblBookedSlots = new JLabel("Booked Slots");
+		lblBookedSlots.setForeground(Color.WHITE);
+		lblBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 30));
+		lblBookedSlots.setBounds(131, 71, 232, 50);
+		bookedSlotsPlayerPanel.add(lblBookedSlots);
 		
-		btnWithdrawP = new JButton("Withdraw");
-		btnWithdrawP.setFont(new Font("Showcard Gothic", Font.PLAIN, 13));
-		btnWithdrawP.setBounds(349, 512, 124, 23);
-		profilePlayerPanel.add(btnWithdrawP);
+		bookedSlotsPanelP = new JPanel();
+		bookedSlotsPanelP.setBackground(new Color(51, 153, 102));
+		bookedSlotsPanelP.setLayout(null);
 		
-		withdrawField2 = new JTextField();
-		withdrawField2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		withdrawField2.setColumns(10);
-		withdrawField2.setBounds(199, 512, 130, 23);
-		profilePlayerPanel.add(withdrawField2);
+		JScrollPane scrollPane_4 = new JScrollPane(bookedSlotsPanelP,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		btnUpdateP = new JButton("Update");
-		btnUpdateP.setFont(new Font("Showcard Gothic", Font.PLAIN, 16));
-		btnUpdateP.setBounds(171, 608, 121, 33);
-		profilePlayerPanel.add(btnUpdateP);
+		JLabel lblSlotDate = new JLabel("<html>Playground #1 Cairo<br>Slot #1    date: 22-22-2002   from: 12:20 am   to: 23:23 pm</html>");
+		lblSlotDate.setForeground(new Color(255, 204, 0));
+		lblSlotDate.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblSlotDate.setBounds(10, 11, 416, 45);
+		bookedSlotsPanelP.add(lblSlotDate);
 		
-		errorMsgProfile_1 = new JLabel("", SwingConstants.CENTER);
-		errorMsgProfile_1.setForeground(new Color(255, 102, 102));
-		errorMsgProfile_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
-		errorMsgProfile_1.setBounds(50, 566, 407, 30);
-		profilePlayerPanel.add(errorMsgProfile_1);
+		JButton btnCancelBooking = new JButton("Cancel Booking");
+		btnCancelBooking.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnCancelBooking.setBounds(51, 67, 151, 23);
+		bookedSlotsPanelP.add(btnCancelBooking);
 		
-		invalidLabel_9 = new JLabel("");
-		invalidLabel_9.setForeground(new Color(255, 102, 102));
-		invalidLabel_9.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_9.setBounds(33, 521, 123, 14);
-		profilePlayerPanel.add(invalidLabel_9);
+		JButton btnInviteTeam = new JButton("Invite Team");
+		btnInviteTeam.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnInviteTeam.setBounds(235, 67, 151, 23);
+		bookedSlotsPanelP.add(btnInviteTeam);
 		
-		invalidLabel_8 = new JLabel("");
-		invalidLabel_8.setForeground(new Color(255, 102, 102));
-		invalidLabel_8.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
-		invalidLabel_8.setBounds(33, 474, 123, 14);
-		profilePlayerPanel.add(invalidLabel_8);
+		JLabel lblSlotDate_2 = new JLabel("Slot #2    date: 22-22-2002   from: 12:20 am   to: 23:23 pm");
+		lblSlotDate_2.setForeground(new Color(255, 204, 0));
+		lblSlotDate_2.setFont(new Font("Showcard Gothic", Font.PLAIN, 15));
+		lblSlotDate_2.setBounds(10, 121, 416, 14);
+		bookedSlotsPanelP.add(lblSlotDate_2);
 		
-		JLabel walletProfileLabel_1_1 = new JLabel("pounds");
-		walletProfileLabel_1_1.setForeground(Color.WHITE);
-		walletProfileLabel_1_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 17));
-		walletProfileLabel_1_1.setBounds(243, 414, 86, 20);
-		profilePlayerPanel.add(walletProfileLabel_1_1);;
+		JButton btnCancelBooking_1 = new JButton("Cancel Booking");
+		btnCancelBooking_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnCancelBooking_1.setBounds(51, 146, 151, 23);
+		bookedSlotsPanelP.add(btnCancelBooking_1);
+		
+		JButton btnInviteTeam_1 = new JButton("Invite Team");
+		btnInviteTeam_1.setFont(new Font("Showcard Gothic", Font.PLAIN, 12));
+		btnInviteTeam_1.setBounds(235, 146, 151, 23);
+		bookedSlotsPanelP.add(btnInviteTeam_1);
+		scrollPane_4.setBounds(33, 161, 438, 442);
+		bookedSlotsPlayerPanel.add(scrollPane_4);
+		
+		errorMsgBookedSlots = new JLabel("", SwingConstants.CENTER);
+		errorMsgBookedSlots.setForeground(new Color(255, 102, 102));
+		errorMsgBookedSlots.setFont(new Font("Showcard Gothic", Font.PLAIN, 18));
+		errorMsgBookedSlots.setBounds(43, 614, 407, 23);
+		bookedSlotsPlayerPanel.add(errorMsgBookedSlots);;
 		
 		tabbedPane.addTab("Admin", null, adminPanel, null);
 		adminPanel.setLayout(null);
@@ -2439,7 +2452,7 @@ public class system {
 		inactivePlaygroundsPanel.setLayout(null);
 		inactivePlaygroundsPanel.setForeground(Color.BLACK);
 		inactivePlaygroundsPanel.setBackground(new Color(51, 153, 102));
-		inactivePlaygroundsPanel.setBounds(227, 0, 499, 652);
+		inactivePlaygroundsPanel.setBounds(227, 0, 499, 675);
 		adminPanel.add(inactivePlaygroundsPanel);
 		
 		JLabel lblInactivePlaygrounds = new JLabel("Inactive Playgrounds");
@@ -2460,7 +2473,7 @@ public class system {
 		activePlaygroundsPanel.setLayout(null);
 		activePlaygroundsPanel.setForeground(Color.BLACK);
 		activePlaygroundsPanel.setBackground(new Color(51, 153, 102));
-		activePlaygroundsPanel.setBounds(227, 0, 499, 652);
+		activePlaygroundsPanel.setBounds(227, 0, 499, 678);
 		adminPanel.add(activePlaygroundsPanel);
 		
 		JLabel lblActivePlaygrounds = new JLabel("Active Playgrounds");
