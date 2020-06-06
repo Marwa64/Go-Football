@@ -40,15 +40,14 @@ public class system {
 	private JTextField nameProfileFieldO, emailProfileFieldO, locationProfileFieldO, walletProfileFieldO, numberProfileFieldO, depositField;
 	private JTextField withdrawField, locationSearchField, fromSearchField, toSearchField, dateSearchField, dateField, nameProfileFieldP, emailProfileFieldP;
 	private JTextField numberProfileFieldP, locationProfileFieldP, walletProfileFieldP, depositField2, withdrawField2, nameTeamField, emailTeamField;
+	private ArrayList<JLabel> newSlotLabels = new ArrayList<JLabel>();
+	private ArrayList<JButton> deleteSlotBtns = new ArrayList<JButton>();
+	private ArrayList<JButton> editPlaygroundBtns = new ArrayList<JButton>();
 	
 	private static ArrayList<player> players = new ArrayList<player>(); // Contains all the players
 	private static ArrayList<playgroundOwner> owners = new ArrayList<playgroundOwner>(); // Contains all the playground owners
 	private ArrayList<slot> newSlots = new ArrayList<slot>();
-	private ArrayList<JLabel> newSlotLabels = new ArrayList<JLabel>();
-	private ArrayList<JButton> deleteSlotBtns = new ArrayList<JButton>();
-	private ArrayList<JButton> editPlaygroundBtns = new ArrayList<JButton>();
 	private static int currentUserID;
-	private static String currentUserType = "";
 	private int verificationCode, slotNum = 1;
 	private static administrator admin = new administrator("admin@gofo.com", "admin"); // email is admin@gofo.com and password is admin
 	
@@ -167,7 +166,6 @@ public class system {
 			System.out.println("email: " + players.get(i).getEmail() + "   password: " + players.get(i).getPassword());
 			if (players.get(i).getEmail().equals(email) && players.get(i).getPassword().equals(password)) {
 				currentUserID = i;
-				currentUserType = "player";
 				found = true;
 				errorMsgLogin.setText("");
 				tabbedPane.setSelectedComponent(playerPanel);
@@ -184,7 +182,6 @@ public class system {
 				System.out.println("email: " + owners.get(j).getEmail() + "   password: " + owners.get(j).getPassword());
 				if (owners.get(j).getEmail().equals(email) && owners.get(j).getPassword().equals(password)) {
 					currentUserID = j;
-					currentUserType = "playgroundOwner";
 					found = true;
 					errorMsgLogin.setText("");
 					tabbedPane.setSelectedComponent(OwnerPanel);
@@ -486,7 +483,7 @@ public class system {
 										players.get(currentUserID).wallet.withdraw(owners.get(currentOwner).playgrounds.get(currentPlayground).getPrice());
 										owners.get(currentOwner).wallet.deposit(owners.get(currentOwner).playgrounds.get(currentPlayground).getPrice());
 										errorMsgMoney.setText("");
-										owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot).book();
+										owners.get(currentOwner).setBookedSlot(currentPlayground, currentSlot);
 										owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot).setPlayer(players.get(currentUserID));
 										players.get(currentUserID).bookSlot(owners.get(currentOwner).playgrounds.get(currentPlayground).slots.get(currentSlot));
 										errorMsgMoney.setText("<html><span style='color:green;'>The slot has been booked!</span></html>");
